@@ -1,7 +1,7 @@
 BIN = node_modules/.bin
 DUO = $(BIN)/duo
 
-default: build
+default: clean build
 
 build: node_modules
 	@mkdir -p build
@@ -12,7 +12,7 @@ build: node_modules
 	@cp -r lib/css build
 	@$(DUO) lib/scripts/popup.js > build/scripts/popup.js
 	@$(DUO) lib/scripts/background.js > build/scripts/background.js
-	@$(DUO) lib/scripts/foreground.js >  build/scripts/foreground.js
+	@$(DUO) lib/scripts/foreground.js > build/scripts/foreground.js
 
 node_modules: package.json
 	@npm install
