@@ -1,0 +1,24 @@
+{
+  "name": "TrackForMe",
+  "homepage": "https://github.com/mejiamanuel57/trackforme",
+  "authors": [
+    "mejiamanuel57 <mejiamanuel57@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.0",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "^4.5.0"
+  }
+}
