@@ -1,2 +1,2 @@
-# trackforme
-This is the repository for our Hack.summit() project, named TrackForme
+# TrackForMe
+This is the repo for our Hack.summit() project.
