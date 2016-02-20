@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/mejiamanuel57/trackforme#readme",
   "devDependencies": {
-    "duo": "^0.15.5"
+    "duo": "0.8.10"
   }
 }
