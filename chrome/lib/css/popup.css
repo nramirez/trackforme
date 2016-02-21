@@ -1,7 +1,7 @@
 body {
     width: 350px;
     background-color: rgba(239, 239, 239, 0.09);
-    font-family: sans-serif;
+     font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .logo {
@@ -25,6 +25,7 @@ body {
     font-weight: bold;
     box-shadow: 0 8px 9px -6px rgba(0,0,0,.3);
     width: 100%;
+    margin-bottom: 20px;
 }
 
     .btn-done:hover {
@@ -40,3 +41,18 @@ body {
         cursor: pointer;
         outline: 0px;
     }
+
+#btn-options {
+    text-align:center
+}
+
+.option-icon{
+     width:20px;
+     height:20px;
+}
+
+.option-icon:hover{
+     width:30px;
+     height:30px;
+     cursor: pointer;
+}
