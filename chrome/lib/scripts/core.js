@@ -9,11 +9,9 @@ var TrackForMe = function() {
 TrackForMe.prototype.init = function() {
   var self = this;
   chrome.browserAction.onClicked.addListener(function() {
-    //Fired when a browser action icon is clicked.
-    //This event will not fire if the browser action has a popup.
-    //self.showPopup();
-    self.tracking = !self.tracking;
-    self.setIcon(self.tracking ? 'active' : 'default');
+    self.showPopup();
+    self.setIcon('active');
+    self.initForeground();
   });
 }
 
@@ -30,5 +28,19 @@ TrackForMe.prototype.setIcon = function(type) {
     path: '/img/' + type + '-icon.png'
   });
 };
+
+TrackForMe.prototype.initForeground = function() {
+  chrome.tabs.query({
+    currentWindow: true,
+    active: true
+  }, function(tabs) {
+    chrome.tabs.executeScript(tabs[0].id, {
+      file: '/scripts/foreground.js'
+    });
+    chrome.tabs.insertCSS(tabs[0].id, {
+      file: '/css/foreground.css'
+    });
+  });
+}
 
 module.exports = TrackForMe;
