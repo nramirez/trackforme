@@ -44,14 +44,13 @@ body {
     padding: 2px;
 }
 
-table {
+#sites-table {
+    margin: 5% 15%;
     border-collapse: collapse;
-    margin: 30px 0px 0px 20%;
-    padding: 20px;
-    width: 80%;
 }
 
-th, td {
+#sites-table th,
+#sites-table td {
     border: 1px solid #e0e0e0;
     border-collapse: collapse;
     text-align: left;
@@ -63,11 +62,11 @@ th {
     background-color: #e7e7e7;
 }
 
-.td-without-border {
+#sites-table .td-without-border {
     border: 0px;
 }
 
-.td-delete-all {
+#sites-table .td-delete-all {
     border: 0px;
     text-align: center;
 }

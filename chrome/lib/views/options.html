@@ -1,58 +1,50 @@
-<link rel="stylesheet" href="options.css">
-
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="/css/options.css">
+</head>
 <body>
-    <div class="panel">
-        <div class="panel-heading">
-            <h1>TrackForMe</h1>
-        </div>
-        <div class="panel-body">
-            <div class="input-div">
-                <div id="email">
-                    <span>Email: </span>
-                    <input type="text" name="FirstName" value="mejimanuel57@gmail.com" id="email-input">
-                    <br>
-                </div>
-                <div id="time">
-                    <span>Time:</span>
-                    <select id="time-input">
-                        <option value="">1 min</option>
-                        <option value="">5 min</option>
-                        <option value="">15 min</option>
-                        <option value="">30 min</option>
-                        <option value="">1 hour</option>
-                        <option value="">2 hour</option>
-                        <option value="">5 hour</option>
-                        <option value="">1 day</option>
-                    </select>
-                </div>
-            </div>
-
-            <table>
-                <tr>
-                    <th>Preview</th>
-                    <th>Website</th>
-                </tr>
-                <tr>
-                    <td><div class="preview"></div></td>
-                    <td>google.com </td>
-                    <td class="td-without-border"> <button class="cancel-btn" type="button" onclick="alert('Hello world!')">X</button></td>
-                </tr>
-                <tr>
-                    <td><div class="preview"></div></td>
-                    <td>Facebook.com</td>
-                    <td class="td-without-border"> <button class="cancel-btn" type="button" onclick="alert('Hello world!')">X</button></td>
-                </tr>
-                <tr>
-                    <td><div class="preview"></div></td>
-                    <td>github.com</td>
-                    <td class="td-without-border"> <button class="cancel-btn" type="button" onclick="alert('Hello world!')">X</button></td>
-                </tr>
-                <tr>
-                    <td class="td-delete-all" colspan="2"><button class="cancel-btn" type="button" onclick="alert('Hello world!')">Delete All</button></td>
-                </tr>
-            </table>
-
-        </div>
+  <div class="panel">
+    <div class="panel-heading">
+      <h1>TrackForMe</h1>
     </div>
-</body>
+    <div class="panel-body">
+      <div class="input-div">
+        <div id="email">
+          <span>Email: </span>
+          <input type="text" name="FirstName" value="mejimanuel57@gmail.com" id="email-input">
+          <br>
+        </div>
+        <div id="time">
+          <span>Time:</span>
+          <select id="time-input">
+            <option value="">1 min</option>
+            <option value="">5 min</option>
+            <option value="">15 min</option>
+            <option value="">30 min</option>
+            <option value="">1 hour</option>
+            <option value="">2 hour</option>
+            <option value="">5 hour</option>
+            <option value="">1 day</option>
+          </select>
+        </div>
+      </div>
 
+      <table id="sites-table">
+        <thead>
+          <tr>
+            <th>Preview</th>
+            <th>Website</th>
+          </tr>
+        </thead>
+        <tbody id="sites-tbody">
+
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+  <script src="/scripts/options.js"></script>
+</body>
+</html>

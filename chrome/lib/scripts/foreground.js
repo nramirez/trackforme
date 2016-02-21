@@ -1,11 +1,13 @@
+var Store =  require('./store');
+var options = {};
+
 var prevElement = null;
 var highlightClass = 'trackforme-highlight';
 var matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
-
+options.currentTracking = {};
 
 function validElement(el) {
-  return (el.nodeName.match(matchingElements) && !el.style.background_image)
-    || !el.parentNode;
+  return (el.nodeName.match(matchingElements) && !el.style.background_image) || !el.parentNode;
 }
 
 function findCloserMatchingParent(el) {
@@ -16,6 +18,38 @@ function findCloserMatchingParent(el) {
   }
 
   return el;
+}
+
+function fullPath(el) {
+  var names = [];
+  while (el.parentNode) {
+    if (el.id) {
+      names.unshift('#' + el.id);
+      break;
+    } else {
+      if (el == el.ownerDocument.documentElement) names.unshift(el.tagName);
+      else {
+        for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
+        names.unshift(el.tagName + ":nth-child(" + c + ")");
+      }
+      el = el.parentNode;
+    }
+  }
+  return names.join(" > ");
+}
+
+function handleCurrentElementClick(event) {
+  event.preventDefault();
+  var row = {
+    path: fullPath(event.target),
+    url: window.location.href
+  };
+
+  chrome.runtime.sendMessage({msg: "capture"}, function(response) {
+    row.img = response.imgSrc;
+    options.currentTracking[row.path] = row;
+    Store.Save(options);
+  });
 }
 
 document.querySelector('body')
@@ -30,7 +64,7 @@ document.querySelector('body')
 
     prevElement = currentEl;
 
-    currentEl.className = currentEl.className
-    ? currentEl.className + ' ' + highlightClass
-    : highlightClass;
+    currentEl.addEventListener('click', handleCurrentElementClick);
+
+    currentEl.className = currentEl.className ? currentEl.className + ' ' + highlightClass : highlightClass;
   });

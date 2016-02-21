@@ -10,6 +10,7 @@ build: node_modules
 	@cp -r lib/img build
 	@cp -r lib/views build
 	@cp -r lib/css build
+	@$(DUO) lib/scripts/options.js > build/scripts/options.js
 	@$(DUO) lib/scripts/popup.js > build/scripts/popup.js
 	@$(DUO) lib/scripts/background.js > build/scripts/background.js
 	@$(DUO) lib/scripts/foreground.js > build/scripts/foreground.js
