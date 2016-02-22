@@ -22,3 +22,12 @@
 .dowload-btn {
     padding: 2px 12px 5px 12px;
 }
+
+.img-responsive{
+    box-shadow: 0 8px 9px -6px rgba(0,0,0,.5);
+    border: 1px solid #D3D3D3;
+}
+#carousel-example-generic{
+    box-shadow: 0 8px 9px -6px rgba(0,0,0,.5);
+    border: 1px solid #D3D3D3;
+}
