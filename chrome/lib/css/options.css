@@ -99,3 +99,14 @@ th {
     border-radius: 8px;
     box-shadow: 0 8px 9px -6px rgba(0,0,0,.3);
 }
+
+#title{
+    font-size:34px;
+    font-weight:bold;
+}
+
+
+#logo-icon{
+    width:10px;
+     height:10px;
+}
