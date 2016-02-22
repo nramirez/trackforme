@@ -1,5 +1,5 @@
 {
-  "name": "trackforme",
+  "name": "trackforme-extension",
   "version": "0.0.1",
   "description": "A chrome extnsion to track the changes of your favorite pages.",
   "main": "index.js",
