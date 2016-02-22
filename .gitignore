@@ -1,5 +1,6 @@
 /webApp/bower_components
 node_modules
+bower_components
 components
 .DS_Store
 build
