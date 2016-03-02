@@ -1,4 +1,5 @@
-var Store = require('./store');
+import Store from './store';
+
 var options = Store.Load();
 var currentElements = options.currentTracking;
 

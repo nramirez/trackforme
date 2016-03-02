@@ -1,8 +1,7 @@
 /**
  * Init TrackForMe.
  */
-
-var TrackForMe = require('./core');
+import TrackForMe from './core';
 
 var tracker = new TrackForMe();
 tracker.init();

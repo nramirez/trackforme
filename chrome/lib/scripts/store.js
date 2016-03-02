@@ -1,9 +1,9 @@
 module.exports = {
-  Load: function() {
+  Load() {
     var options = localStorage['TRACKFORME'];
     return !options ? this.Save({}) : JSON.parse(options);
   },
-  Save: function(options) {
+  Save(options) {
     localStorage['TRACKFORME'] = JSON.stringify(options);
     return options;
   }

@@ -1,4 +1,5 @@
-var Store =  require('./store');
+import Store from './store';
+
 var options = {};
 
 var prevElement = null;
