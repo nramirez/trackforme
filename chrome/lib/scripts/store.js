@@ -1,10 +1,19 @@
-module.exports = {
-  Load() {
-    var options = localStorage['TRACKFORME'];
-    return !options ? this.Save({}) : JSON.parse(options);
+import store from 'amplify-store';
+
+const storeKeys = {
+  USERCONFIG: 'USERCONFIG'
+};
+
+const TrackStore = {
+  load() {
+    let conf = store(storeKeys.USERCONFIG) || {}
+    console.log('loading', conf);
+    return conf;
   },
-  Save(options) {
-    localStorage['TRACKFORME'] = JSON.stringify(options);
-    return options;
+  save(config) {
+    console.log('saving', config);
+    return store(storeKeys.USERCONFIG, config);
   }
-}
+};
+
+export default TrackStore;

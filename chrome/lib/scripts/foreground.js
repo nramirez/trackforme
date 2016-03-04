@@ -1,11 +1,11 @@
 import Store from './store';
 
-var options = {};
+var config = Store.load();
 
 var prevElement = null;
 var highlightClass = 'trackforme-highlight';
 var matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
-options.currentTracking = {};
+config.currentTracking = {};
 
 function validElement(el) {
   return (el.nodeName.match(matchingElements) && !el.style.background_image) || !el.parentNode;
@@ -48,8 +48,8 @@ function handleCurrentElementClick(event) {
 
   chrome.runtime.sendMessage({msg: "capture"}, function(response) {
     row.img = response.imgSrc;
-    options.currentTracking[row.path] = row;
-    Store.Save(options);
+    config.currentTracking[row.path] = row;
+    Store.save(config);
   });
 }
 

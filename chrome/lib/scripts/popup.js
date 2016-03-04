@@ -1,29 +1,26 @@
 import Store from './store';
 
-var options = Store.Load();
-var currentElements = options.currentTracking;
+var config = Store.load();
+var currentElements = config.currentTracking;
 
 //Done
 document.querySelector('.btn-done')
   .addEventListener('click', function(event) {
-    if (options && currentElements) {
-      options.sites = options.sites ? Object.assign(options.sites, currentElements) : currentElements;
+    console.log('the done', config);
+      if (config && currentElements) {
+        config.sites = config.sites ? Object.assign(config.sites, currentElements) : currentElements;
 
-      chrome.storage.local.set({
-        'OPTIONS': options
-      });
+        Store.save(config);
 
-      console.log(options);
-
-      if (!options.email)
-        chrome.tabs.create({
-          url: chrome.extension.getURL('/views/options.html')
-        });
-
-    } else {
-      chrome.runtime.reload();
-    }
-  });
+        if (!config.email) {
+          chrome.tabs.create({
+            url: chrome.extension.getURL('/views/options.html')
+          });
+        } else {
+          chrome.runtime.reload();
+        }
+      }
+    });
 
 document.getElementById('btn-options')
   .addEventListener('click', function() {
