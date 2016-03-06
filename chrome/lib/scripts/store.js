@@ -1,19 +1,17 @@
-import store from 'amplify-store';
+import amplify from 'amplify-store';
 
-const storeKeys = {
-  USERCONFIG: 'USERCONFIG'
-};
+const USERCONFIG = 'USERCONFIG';
 
-const TrackStore = {
-  load() {
-    let conf = store(storeKeys.USERCONFIG) || {}
+const Store = {
+  Load() {
+    let conf = amplify(USERCONFIG) || {}
     console.log('loading', conf);
     return conf;
   },
-  save(config) {
+  Save(config) {
     console.log('saving', config);
-    return store(storeKeys.USERCONFIG, config);
+    return amplify(USERCONFIG, config);
   }
 };
 
-export default TrackStore;
+export default Store;

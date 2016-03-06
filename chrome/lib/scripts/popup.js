@@ -1,26 +1,28 @@
-import Store from './store';
+import BackStore from './background-store';
 
-var config = Store.load();
-var currentElements = config.currentTracking;
+let config = {};
+BackStore.Load(function(response) {
+  config = response.config;
+});
 
-//Done
 document.querySelector('.btn-done')
   .addEventListener('click', function(event) {
+    let tracking = config.currentTracking;
     console.log('the done', config);
-      if (config && currentElements) {
-        config.sites = config.sites ? Object.assign(config.sites, currentElements) : currentElements;
+    if (config && tracking) {
+      config.sites = config.sites ? Object.assign(config.sites, tracking) : tracking;
 
-        Store.save(config);
+      BackStore.Save(config);
 
-        if (!config.email) {
-          chrome.tabs.create({
-            url: chrome.extension.getURL('/views/options.html')
-          });
-        } else {
-          chrome.runtime.reload();
-        }
+      if (!config.email) {
+        chrome.tabs.create({
+          url: chrome.extension.getURL('/views/options.html')
+        });
+      } else {
+        chrome.runtime.reload();
       }
-    });
+    }
+  });
 
 document.getElementById('btn-options')
   .addEventListener('click', function() {

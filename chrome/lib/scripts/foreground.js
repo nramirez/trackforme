@@ -1,11 +1,15 @@
-import Store from './store';
+import BackStore from './background-store';
+import Actions from './actions';
 
-var config = Store.load();
+let config = {};
+let prevElement = null;
+const highlightClass = 'trackforme-highlight';
+const matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
 
-var prevElement = null;
-var highlightClass = 'trackforme-highlight';
-var matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
-config.currentTracking = {};
+BackStore.Load(function(response) {
+  config = response.config;
+  config.currentTracking = {};
+});
 
 function validElement(el) {
   return (el.nodeName.match(matchingElements) && !el.style.background_image) || !el.parentNode;
@@ -17,12 +21,11 @@ function findCloserMatchingParent(el) {
   while (!validElement(el)) {
     el = el.parentNode;
   }
-
   return el;
 }
 
 function fullPath(el) {
-  var names = [];
+  let names = [];
   while (el.parentNode) {
     if (el.id) {
       names.unshift('#' + el.id);
@@ -41,21 +44,25 @@ function fullPath(el) {
 
 function handleCurrentElementClick(event) {
   event.preventDefault();
-  var row = {
+  console.log('clicked');
+  let row = {
     path: fullPath(event.target),
     url: window.location.href
   };
 
-  chrome.runtime.sendMessage({msg: "capture"}, function(response) {
+  chrome.runtime.sendMessage({
+    action: Actions.SNAPSHOT
+  }, function(response) {
     row.img = response.imgSrc;
     config.currentTracking[row.path] = row;
-    Store.save(config);
+    
+    BackStore.Save(config);
   });
 }
 
 document.querySelector('body')
   .addEventListener("mouseover", function(e) {
-    var currentEl = findCloserMatchingParent(e.relatedTarget);
+    let currentEl = findCloserMatchingParent(e.relatedTarget);
 
     if (prevElement == currentEl || !currentEl) return;
 
