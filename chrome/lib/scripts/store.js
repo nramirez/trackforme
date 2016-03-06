@@ -1,10 +1,17 @@
-module.exports = {
+import amplify from 'amplify-store';
+
+const USERCONFIG = 'USERCONFIG';
+
+const Store = {
   Load() {
-    var options = localStorage['TRACKFORME'];
-    return !options ? this.Save({}) : JSON.parse(options);
+    let conf = amplify(USERCONFIG) || {}
+    console.log('loading', conf);
+    return conf;
   },
-  Save(options) {
-    localStorage['TRACKFORME'] = JSON.stringify(options);
-    return options;
+  Save(config) {
+    console.log('saving', config);
+    return amplify(USERCONFIG, config);
   }
-}
+};
+
+export default Store;

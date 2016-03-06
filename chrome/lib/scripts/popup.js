@@ -1,27 +1,26 @@
-import Store from './store';
+import BackStore from './background-store';
 
-var options = Store.Load();
-var currentElements = options.currentTracking;
+let config = {};
+BackStore.Load(function(response) {
+  config = response.config;
+});
 
-//Done
 document.querySelector('.btn-done')
   .addEventListener('click', function(event) {
-    if (options && currentElements) {
-      options.sites = options.sites ? Object.assign(options.sites, currentElements) : currentElements;
+    let tracking = config.currentTracking;
+    console.log('the done', config);
+    if (config && tracking) {
+      config.sites = config.sites ? Object.assign(config.sites, tracking) : tracking;
 
-      chrome.storage.local.set({
-        'OPTIONS': options
-      });
+      BackStore.Save(config);
 
-      console.log(options);
-
-      if (!options.email)
+      if (!config.email) {
         chrome.tabs.create({
           url: chrome.extension.getURL('/views/options.html')
         });
-
-    } else {
-      chrome.runtime.reload();
+      } else {
+        chrome.runtime.reload();
+      }
     }
   });
 

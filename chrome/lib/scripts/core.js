@@ -1,24 +1,26 @@
 /**
  * TrackForMe.
  */
-
 class TrackForMe {
   constructor() {
     this.tracking = false;
   }
+
   init() {
-    var self = this;
+    let self = this;
     chrome.browserAction.onClicked.addListener(function() {
       self.showPopup();
       self.setIcon('active');
       self.initForeground();
     });
   }
+
   showPopup() {
     chrome.browserAction.setPopup({
       popup: '/views/popup.html'
     });
   }
+
   setIcon(type) {
     if (!type) return;
 
@@ -26,6 +28,7 @@ class TrackForMe {
       path: '/img/' + type + '-icon.png'
     });
   }
+  
   initForeground() {
     chrome.tabs.query({
       currentWindow: true,
