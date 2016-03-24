@@ -1,18 +1,21 @@
 import BackStore from './background-store';
 
 let config = {};
+let currentTracking = {};
 BackStore.Load(function(response) {
   config = response.config;
 });
 
+BackStore.LoadCurrentTracking(function(response) {
+  currentTracking = response.currentTracking;
+  console.log(currentTracking);
+});
+
 document.querySelector('.btn-done')
   .addEventListener('click', function(event) {
-    let tracking = config.currentTracking;
     console.log('the done', config);
-    if (config && tracking) {
-      config.sites = config.sites ? Object.assign(config.sites, tracking) : tracking;
-
-      BackStore.Save(config);
+    if (currentTracking) {
+      BackStore.SaveTrack(currentTracking);
 
       if (!config.email) {
         chrome.tabs.create({

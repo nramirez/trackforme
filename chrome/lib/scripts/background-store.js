@@ -6,11 +6,23 @@ const BackgroundStore = {
       action: Actions.LOADCONFIG
     }, callback);
   },
-  Save(config) {
+  SaveTrack(sites) {
     chrome.runtime.sendMessage({
-      action: Actions.SAVECONFIG,
-      config: config
+      action: Actions.SAVESITES,
+      sites: sites
     });
+  },
+  SaveCurrentTracking(currentTracking) {
+    console.log('saving current tracking', currentTracking);
+    chrome.runtime.sendMessage({
+      action: Actions.SAVECURRENTTRACKING,
+      currentTracking: currentTracking,
+    });
+  },
+  LoadCurrentTracking(callback) {
+    chrome.runtime.sendMessage({
+      action: Actions.LOADCURRENTTRACKING
+    }, callback);
   }
 };
 

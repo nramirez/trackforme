@@ -1,15 +1,12 @@
 import BackStore from './background-store';
 import Actions from './actions';
 
-let config = {};
+let currentTracking = {};
 let prevElement = null;
 const highlightClass = 'trackforme-highlight';
 const matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
-
-BackStore.Load(function(response) {
-  config = response.config;
-  config.currentTracking = {};
-});
+const clickHandlerTimeout = 500;
+let clickEventInProgress = false;
 
 function validElement(el) {
   return (el.nodeName.match(matchingElements) && !el.style.background_image) || !el.parentNode;
@@ -44,7 +41,16 @@ function fullPath(el) {
 
 function handleCurrentElementClick(event) {
   event.preventDefault();
-  console.log('clicked');
+  if (clickEventInProgress) {
+    return;
+  }
+  clickEventInProgress = true;
+  //Avoid this method to be called multiple times,
+  //This wouldn't be needed if we could figure out
+  //how to attach the event only once
+  setTimeout(function() {
+    clickEventInProgress = false;
+  }, clickHandlerTimeout);
   let row = {
     path: fullPath(event.target),
     url: window.location.href
@@ -54,9 +60,8 @@ function handleCurrentElementClick(event) {
     action: Actions.SNAPSHOT
   }, function(response) {
     row.img = response.imgSrc;
-    config.currentTracking[row.path] = row;
-    
-    BackStore.Save(config);
+    currentTracking[row.path] = row;
+    BackStore.SaveCurrentTracking(currentTracking);
   });
 }
 
