@@ -44,7 +44,7 @@ gulp.task('build', cb => {
 gulp.task('watch', cb => {
     gulp.watch([
       `${paths.views}/**.handlebars`,
-      `${paths.src}/**.js`,
+      `${paths.src}/**/**`,
       `${paths.publicSrc}/**.jsx`
     ], ['build']);
 });
