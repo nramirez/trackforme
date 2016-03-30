@@ -32,6 +32,6 @@
   },
   "dependencies": {
     "amplify-store": "0.0.5",
-    "jquery": "^2.2.1",
+    "jquery": "^2.2.1"
   }
 }
