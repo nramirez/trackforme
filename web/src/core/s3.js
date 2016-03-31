@@ -16,19 +16,22 @@ class S3 {
     postImage(image) {
         return new Promise((resolve, reject) => {
             var buf = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""),'base64');
-            var params = { Bucket: 'trackforme',
-                    Key: hat(),
-                    Body: buf,
-                    ContentType: 'image/jpeg'
-                };
 
-            this._s3.putObject(params, function (err, data) {
-                if (err)
-                    reject(err);
-                else
-                    resolve(data);
-            });
-    });
+            var params = {
+                Bucket: 'trackforme',
+                Key: hat(),
+                Body: buf,
+                ContentType: 'image/jpeg',
+                ACL: 'public-read'
+            };
+
+            this._s3.upload(params, function (err, data) {
+                    if (err)
+                        reject(err);
+                    else
+                        resolve(data);
+                });
+        });
 
     };
 };

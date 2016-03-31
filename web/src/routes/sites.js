@@ -41,14 +41,17 @@ router.post('/', (req, res) => {
 
 
 router.post('/image', (req, res) => {
-  let image = req.body.image;
+  let image = req.body && req.body.image;
+
   if (!image) {
     res.status(500).send('Image is required');
   }
   else {
     s3.postImage(image)
         .then((img) => {
-          res.sendStatus(200);
+          res
+            .status(200)
+            .send(img.Location);
         })
         .catch((err) => {
             res
