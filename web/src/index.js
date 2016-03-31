@@ -47,9 +47,10 @@ app.set('view engine', 'handlebars');
 app.use('/', express.static(__dirname + '/public'));
 
 app.use(morgan('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: '5mb'
 }));
 
 app.get('/', (req, res) => {

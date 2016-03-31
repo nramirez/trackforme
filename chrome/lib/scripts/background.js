@@ -38,10 +38,14 @@ chrome.runtime.onMessage.addListener(
 //Capture Handler
 function TakeSnapshot(sendResponse) {
   chrome.tabs.captureVisibleTab(null, {},
-    function(dataUrl) {
-      sendResponse({
-        imgSrc: dataUrl
-      });
+    function(image) {
+        Store.SaveImage(image, (err, imageUrl) => {
+            if(err) sendResponse({err: err});
+            else
+                sendResponse({
+                    imgSrc: imageUrl
+                });
+        });
     }
   );
 };
