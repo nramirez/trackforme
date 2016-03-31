@@ -1,0 +1,9 @@
+{
+  "AWS" :{
+    "S3": {
+      "key": "AKIAJEI4ZXEIUTXOXRNQ",
+      "secret": "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",
+      "region": "us-west-1"
+    }
+  }
+}
