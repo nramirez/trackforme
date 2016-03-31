@@ -6,12 +6,14 @@ const BackgroundStore = {
             action: Actions.LOADCONFIG
         }, callback);
     },
-    SaveTrack(sites) {
+
+    SaveTrack(sites, callback) {
         chrome.runtime.sendMessage({
             action: Actions.SAVESITES,
             sites: sites
-        });
+        }, callback);
     },
+
     SaveCurrentTracking(currentTracking) {
         console.log('saving current tracking', currentTracking);
         chrome.runtime.sendMessage({
@@ -19,11 +21,13 @@ const BackgroundStore = {
             currentTracking: currentTracking,
         });
     },
+
     LoadCurrentTracking(callback) {
         chrome.runtime.sendMessage({
             action: Actions.LOADCURRENTTRACKING
         }, callback);
     },
+
     SaveUserSettings(email) {
         chrome.runtime.sendMessage({
             action: Actions.SAVEUSERSETTINGS,

@@ -49,8 +49,7 @@ gulp.task('deploy-server', cb => {
 gulp.task('watch', cb => {
     gulp.watch([
       `${paths.views}/**.handlebars`,
-      `${paths.src}/**/**`,
-      `${paths.publicSrc}/**.jsx`
+      `${paths.src}/**/**`
     ], ['build']);
 });
 
@@ -94,11 +93,11 @@ gulp.task('client', cb => {
 });
 
 gulp.task('css', () => {
-  return gulp.src(`${paths.css}/*.css`)
+  return gulp.src(`${paths.css}/**`)
     .pipe(copy(paths.dest));
 });
 
 gulp.task('img', () => {
-  return gulp.src(`${paths.img}/*.jpg`)
+  return gulp.src(`${paths.img}/**`)
     .pipe(copy(paths.dest));
 });

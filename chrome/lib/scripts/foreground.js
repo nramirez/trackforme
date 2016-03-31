@@ -4,80 +4,62 @@ import Actions from './actions';
 let currentTracking = {};
 let prevElement = null;
 const highlightClass = 'trackforme-highlight';
-const matchingElements = '(?:DIV|P|LI|OL|UL|TD|TR|TABLE|H[1-6])';
 const clickHandlerTimeout = 500;
 let clickEventInProgress = false;
 
-function validElement(el) {
-  return (el.nodeName.match(matchingElements) && !el.style.background_image) || !el.parentNode;
-}
+const fullPath = (el) => {
+    let names = [], c, e;
+    while (el.parentNode) {
+        if (el.id) {
+            names.unshift('#' + el.id);
+            break;
+        } else {
+            if (el == el.ownerDocument.documentElement) names.unshift(el.tagName);
+            else {
+                for (c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
 
-function findCloserMatchingParent(el) {
-  if (!el) return null;
-
-  while (!validElement(el)) {
-    el = el.parentNode;
-  }
-  return el;
-}
-
-function fullPath(el) {
-  let names = [];
-  while (el.parentNode) {
-    if (el.id) {
-      names.unshift('#' + el.id);
-      break;
-    } else {
-      if (el == el.ownerDocument.documentElement) names.unshift(el.tagName);
-      else {
-        for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
-        names.unshift(el.tagName + ":nth-child(" + c + ")");
-      }
-      el = el.parentNode;
+                names.unshift(el.tagName + ":nth-child(" + c + ")");
+            }
+            el = el.parentNode;
+        }
     }
-  }
-  return names.join(" > ");
+    return names.join(" > ");
 }
 
-function handleCurrentElementClick(event) {
-  event.preventDefault();
-  if (clickEventInProgress) {
-    return;
-  }
-  clickEventInProgress = true;
-  //Avoid this method to be called multiple times,
-  //This wouldn't be needed if we could figure out
-  //how to attach the event only once
-  setTimeout(function() {
-    clickEventInProgress = false;
-  }, clickHandlerTimeout);
-  let row = {
-    path: fullPath(event.target),
-    url: window.location.href
-  };
+const handleClick = (element) => {
+    if (clickEventInProgress)
+        return;
 
-  chrome.runtime.sendMessage({
-    action: Actions.SNAPSHOT
-  }, function(response) {
-    row.img = response.imgSrc;
-    currentTracking[row.path] = row;
-    BackStore.SaveCurrentTracking(currentTracking);
-  });
+    clickEventInProgress = true;
+    //Avoid this method to be called multiple times
+    setTimeout(() => clickEventInProgress = false, clickHandlerTimeout);
+
+    let tracking = {
+        elementPath: fullPath(element),
+        url: window.location.href,
+        elementContent: element.innerHTML
+    };
+
+    chrome.runtime.sendMessage({
+        action: Actions.SNAPSHOT
+    }, (response) => {
+        tracking.img = response.imgSrc;
+        currentTracking[tracking.elementPath] = tracking;
+        BackStore.SaveCurrentTracking(currentTracking);
+    });
 }
 
-document.querySelector('body')
-  .addEventListener("mouseover", function(e) {
-    let currentEl = findCloserMatchingParent(e.relatedTarget);
+document.addEventListener('mouseover', (event) => {
+    let target = event.target;
 
-    if (prevElement == currentEl || !currentEl) return;
+    if (prevElement)
+        prevElement.className = prevElement.className.replace(/\btrackforme-highlight\b/, '');
 
-    if (prevElement) {
-      prevElement.className = prevElement.className.replace(/\btrackforme-highlight\b/, '');
-    }
+    target.className = target.className ? target.className + ' ' + highlightClass : highlightClass;
+    prevElement = target;
+}, true);
 
-    prevElement = currentEl;
-
-    currentEl.addEventListener('click', handleCurrentElementClick);
-
-    currentEl.className = currentEl.className ? currentEl.className + ' ' + highlightClass : highlightClass;
-  });
+document.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    handleClick(prevElement);
+}, true);

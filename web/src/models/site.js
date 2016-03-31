@@ -20,7 +20,8 @@ const Site = new mongoose.Schema({
     default: true
   },
   deleted: Boolean,
-  elementPath: String
+  elementPath: String,
+  elementContent: String
 });
 
 export default mongoose.model('Sites', Site);

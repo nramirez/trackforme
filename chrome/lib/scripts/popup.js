@@ -15,15 +15,16 @@ document.querySelector('.btn-done')
   .addEventListener('click', function(event) {
     console.log('the done', config);
     if (currentTracking) {
-      BackStore.SaveTrack(currentTracking);
-
-      if (!config.email) {
+      BackStore.SaveTrack(currentTracking, () => {
         chrome.tabs.create({
           url: chrome.extension.getURL('/views/options.html')
         });
-      } else {
-        chrome.runtime.reload();
-      }
+        //TODO: this is not what we want, this disables the whole stuff,
+        //and we won't be able to display the infor for the user in options.
+        //we need to manually reload the extension.
+        //Create a separate issue for this
+        //chrome.runtime.reload();
+      });
     }
   });
 
