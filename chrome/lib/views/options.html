@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
-  <link rel="stylesheet" href="/css/options.css">
+  <title>Options</title>
+  <link rel="stylesheet" href="../css/options.css">
 </head>
 <body>
   <div class="panel">
@@ -12,25 +12,27 @@
     </div>
     <div class="panel-body">
       <div class="input-div">
-        <div id="email">
-          <span>Email: </span>
-          <input type="text" name="FirstName" value="mejimanuel57@gmail.com" id="email-input">
-          <br>
-        </div>
-        <div id="time">
-          <span>Time:</span>
-          <select id="time-input">
-            <option value="">1 min</option>
-            <option value="">5 min</option>
-            <option value="">15 min</option>
-            <option value="">30 min</option>
-            <option value="">1 hour</option>
-            <option value="">2 hour</option>
-            <option value="">5 hour</option>
-            <option value="">1 day</option>
-          </select>
-        </div>
+          <div id="email">
+            <p>Email: </p>
+            <input type="email" name="email" id="email-input" placeholder="Add Your Email" required><span id="email-error"></span>
+            <br>
+          </div>
+          <div id="time">
+            <p>Tracking Time:</p>
+            <select name="time" id="time-input">
+              <option value="">1 min</option>
+              <option value="">5 min</option>
+              <option value="">15 min</option>
+              <option value="">30 min</option>
+              <option value="">1 hour</option>
+              <option value="">2 hour</option>
+              <option value="">5 hour</option>
+              <option value="">1 day</option>
+            </select>
+          </div>
+        <button class="btn-save" id="save-user-settings">Save Changes</button> <span id="saved-message"> </span>
       </div>
+      <hr>
       <table id="sites-table">
         <thead>
           <tr>
@@ -43,6 +45,6 @@
       </table>
     </div>
   </div>
-  <script src="/scripts/options.js"></script>
+  <script src="../scripts/options.js"></script>
 </body>
 </html>
