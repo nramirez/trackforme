@@ -1,111 +1,122 @@
 body {
-    background-color: #e7e7e7;
-    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: 700;
+  background-color: #e7e7e7;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+p{
+  margin:2px;
 }
 
 .panel {
-    width: 45%;
-    height: 700px;
-    background-color: white;
-    border-radius: 25px;
-    margin: 30px auto;
-    overflow-y: auto;
-    overflow-x: hidden;
+  width: 45%;
+  height: 700px;
+  background-color: white;
+  border-radius: 25px;
+  margin: 30px auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
 .panel-heading {
-    max-width: 100%;
-    height: 60px;
-    background-color: #5cb85c;
-    border-radius: 25px 25px 0px 0px;
-    color: white;
-    padding: 10px 0px 5px 15px;
+  max-width: 100%;
+  height: 60px;
+  background-color: #5cb85c;
+  border-radius: 25px 25px 0px 0px;
+  color: white;
+  padding: 10px 0px 5px 15px;
 }
-
 .panel-body {
-    max-width: 100%;
+  max-width: 100%;
 }
-
-
-#email, #time {
-    margin: 20px 0px 0px 0px;
-    font-size: 20px;
-}
-
 .input-div {
-    margin: 20px 0px 0px 30%;
+  margin: 20px 0px 0px 20%;
 }
-
+#time{margin-top: 16px}
 #time-input, #email-input {
-    width: 40%;
-    height: 30px;
-    border-radius: 8px;
-    padding: 2px;
+  height: 30px;
+  border-radius: 8px;
+  padding: 2px;
 }
-
+#email-input {
+  width: 68%;
+}
+#time-input {
+  width: 70%;
+}
+.btn-save {
+  background-color: #5cb85c;
+  color: white;
+  padding: 10px 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  box-shadow: 0 8px 9px -6px rgba(0, 0, 0, .3);
+  width: 70%;
+  margin: 20px 0px 20px 0px;
+}
+.btn-save:hover {
+  background-color: #449d44;
+  cursor: pointer;
+  outline: 0px;
+}
+.btn-save:active {
+  background-color: #449d44;
+  border: 2px;
+  font-size: 25px;
+  cursor: pointer;
+  outline: 0px;
+}
 #sites-table {
-    margin: 5% 15%;
-    border-collapse: collapse;
+  margin: 5% 15%;
+  border-collapse: collapse;
 }
-
-#sites-table th,
-#sites-table td {
-    border: 1px solid #e0e0e0;
-    border-collapse: collapse;
-    text-align: left;
-    padding: 15px;
+#sites-table th, #sites-table td {
+  border: 1px solid #e0e0e0;
+  border-collapse: collapse;
+  text-align: left;
+  padding: 15px;
 }
-
 th {
-    font-size: 20px;
-    background-color: #e7e7e7;
+  font-size: 20px;
+  background-color: #e7e7e7;
 }
-
 #sites-table .td-without-border {
-    border: 0px;
+  border: 0px;
 }
-
 #sites-table .td-delete-all {
-    border: 0px;
-    text-align: center;
+  border: 0px;
+  text-align: center;
 }
-
 .cancel-btn {
-    background-color: #ff0000;
-    color: white;
-    padding: 10px 15px;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 8px 9px -6px rgba(0,0,0,.3);
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 8px 9px -6px rgba(0, 0, 0, .3);
 }
-
 .cancel-btn:hover {
-    background-color: #808080;
-    border: 2px;
-    font-size: 25px;
-    cursor: pointer;
-    outline: 0px;
+  background-color: #808080;
+  border: 2px;
+  font-size: 25px;
+  cursor: pointer;
+  outline: 0px;
 }
-
 .img-preview {
-    height: 50px;
-    width: 80px;
-    border: 1px solid black;
-    margin: 0px auto;
-    border-radius: 8px;
-    box-shadow: 0 8px 9px -6px rgba(0,0,0,.3);
+  height: 50px;
+  width: 80px;
+  border: 1px solid black;
+  margin: 0px auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 9px -6px rgba(0, 0, 0, .3);
 }
-
-#title{
-    font-size:34px;
-    font-weight:bold;
+#title {
+  font-size: 34px;
+  font-weight: bold;
 }
-
-
-#logo-icon{
-    width:10px;
-     height:10px;
+#logo-icon {
+  width: 10px;
+  height: 10px;
 }

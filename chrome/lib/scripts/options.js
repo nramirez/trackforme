@@ -26,7 +26,18 @@ const sideRow = (previewUrl, siteUrl) =>
     </td>
   </tr>`;
 
+function setupEmail(email){
+  if (!email) {
+    document.getElementById('email-input').value = "Add your email";
+  }
+  else {
+    document.getElementById('email-input').value = email;
+  }
+
+}
+
 
 BackStore.Load(function(response){
   displaySites(response.config.sites);
+  setupEmail(response.config.email);
 });
