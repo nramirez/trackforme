@@ -28,7 +28,7 @@ const paths = {
 let express;
 
 gulp.task('default', cb => {
-  run('server', 'build', 'watch', 'restart', cb);
+  run('server', 'build', 'watch', cb);
 });
 
 gulp.task('bower', cb => {
