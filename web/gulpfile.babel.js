@@ -28,7 +28,7 @@ const paths = {
 let express;
 
 gulp.task('default', cb => {
-  run('server', 'build', 'watch', cb);
+  run('server', 'build', 'watch', 'restart', cb);
 });
 
 gulp.task('bower', cb => {
@@ -37,7 +37,7 @@ gulp.task('bower', cb => {
 });
 
 gulp.task('build', cb => {
-  run('clean', 'babel', 'bower', 'img', 'css', 'client', 'restart', cb);
+  run('clean', 'babel', 'bower', 'img', 'css', 'client', cb);
 });
 
 //build when a file has changed
