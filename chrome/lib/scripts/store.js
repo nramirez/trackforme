@@ -38,7 +38,7 @@ const Store = {
       callback(true);
     });
   },
-  SaveImage(image, callback){
+  SaveImage(image, callback) {
     $.post(`${ServerBaseUrl}/sites/image`, {
         image: image
     }, (url) => {

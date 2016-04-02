@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(
 //Capture Handler
 function TakeSnapshot(sendResponse) {
   chrome.tabs.captureVisibleTab(null, {},
-    function(image) {
+    (image) => {
         Store.SaveImage(image, (err, imageUrl) => {
             if(err) sendResponse({err: err});
             else
