@@ -37,6 +37,14 @@ const Store = {
       console.log(response);
       callback(true);
     });
+  },
+  SaveImage(image, callback) {
+    $.post(`${ServerBaseUrl}/sites/image`, {
+        image: image
+    }, (url) => {
+      callback(null, url);
+    });
+
   }
 };
 

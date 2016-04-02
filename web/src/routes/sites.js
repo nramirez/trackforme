@@ -3,7 +3,10 @@
 import User from '../models/user.js';
 import Site from '../models/site.js';
 import express from 'express';
+import s3Handler from '../core/s3';
+
 const router = express.Router();
+const s3 = new s3Handler();
 
 router.get('/', (req, res) => {
   Site.find({}, function(err, sites) {
@@ -33,6 +36,22 @@ router.post('/', (req, res) => {
         });
       }
     });
+  }
+});
+
+router.post('/image', (req, res) => {
+  let image = req.body && req.body.image;
+
+  if (!image) {
+    res.status(500).send('Image is required');
+  } else {
+    s3.postImage(image)
+      .then((img) => {
+        res.status(200).send(img.Location);
+      })
+      .catch((err) => {
+        res.status(500).send('Internal error: ' + err.stack);
+      });
   }
 });
 

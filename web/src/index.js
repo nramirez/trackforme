@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import exphbs from 'express-handlebars';
 import mongoose from 'mongoose';
+import config from '../config';
 
 //Routes
 import usersRoutes from './routes/users';
@@ -47,9 +48,12 @@ app.set('view engine', 'handlebars');
 app.use('/', express.static(__dirname + '/public'));
 
 app.use(morgan('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: config.maxScreenshotSize
+}));
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: config.maxScreenshotSize
 }));
 
 app.get('/', (req, res) => {
