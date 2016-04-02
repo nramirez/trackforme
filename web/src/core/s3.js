@@ -15,7 +15,7 @@ class S3 {
 
   postImage(image) {
     return new Promise((resolve, reject) => {
-      const buf = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""),'base64');
+      const buf = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 
       const params = {
         Bucket: 'trackforme',
@@ -25,7 +25,7 @@ class S3 {
         ACL: 'public-read'
       };
 
-      this._s3.upload(params, function (err, data) {
+      this._s3.upload(params, function(err, data) {
         if (err) reject(err);
         else resolve(data);
       });

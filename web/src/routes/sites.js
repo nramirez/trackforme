@@ -32,32 +32,26 @@ router.post('/', (req, res) => {
           if (siteErr) {
             res.status(500).send('Error saving the sites: ' + siteErr);
           }
-          res.send(saved);
+          res.send(savedbe);
         });
       }
     });
   }
 });
 
-
 router.post('/image', (req, res) => {
   let image = req.body && req.body.image;
 
   if (!image) {
     res.status(500).send('Image is required');
-  }
-  else {
+  } else {
     s3.postImage(image)
-        .then((img) => {
-          res
-            .status(200)
-            .send(img.Location);
-        })
-        .catch((err) => {
-            res
-              .status(500)
-              .send('Internal error: ' + err.stack);
-        });
+      .then((img) => {
+        res.status(200).send(img.Location);
+      })
+      .catch((err) => {
+        res.status(500).send('Internal error: ' + err.stack);
+      });
   }
 });
 
