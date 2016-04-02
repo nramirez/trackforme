@@ -18,7 +18,7 @@ class S3 {
       const buf = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 
       const params = {
-        Bucket: 'trackforme',
+        Bucket: config.AWS.S3.bucket,
         Key: hat(),
         Body: buf,
         ContentType: 'image/jpeg',

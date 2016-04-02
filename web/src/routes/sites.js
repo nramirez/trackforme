@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
           if (siteErr) {
             res.status(500).send('Error saving the sites: ' + siteErr);
           }
-          res.send(savedbe);
+          res.send(saved);
         });
       }
     });
