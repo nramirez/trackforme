@@ -37,7 +37,7 @@ gulp.task('bower', cb => {
 });
 
 gulp.task('build', cb => {
-  run('clean', 'babel', 'bower', 'img', 'css', 'client', 'restart', cb);
+  run('clean', 'babel', 'bower', 'img', 'css', 'client', cb);
 });
 
 //build when a file has changed
@@ -46,7 +46,7 @@ gulp.task('watch', cb => {
       `${paths.views}/**.handlebars`,
       `${paths.src}/**/**`,
       `${paths.publicSrc}/**.jsx`
-    ], ['build']);
+    ], ['build', 'restart']);
 });
 
 /*
