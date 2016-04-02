@@ -46,7 +46,7 @@ gulp.task('watch', cb => {
       `${paths.views}/**.handlebars`,
       `${paths.src}/**/**`,
       `${paths.publicSrc}/**.jsx`
-    ], ['build']);
+    ], ['build', 'restart']);
 });
 
 /*
