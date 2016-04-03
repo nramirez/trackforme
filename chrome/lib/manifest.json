@@ -10,6 +10,11 @@
     "*://*/",
     "<all_urls>"
   ],
+  "icons": {
+    "16": "/img/icon16.png",
+    "48": "/img/icon48.png",
+    "128": "/img/icon128.png"
+  },
   "content_security_policy": "script-src 'self' https://*.segment.com https://*.mxpnl.com; object-src 'self'",
   "browser_action": {
     "default_icon": "/img/default-icon.png",
