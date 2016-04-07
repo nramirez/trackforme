@@ -59,19 +59,18 @@ const Store = {
 
     },
 
-    SaveConfig(config) {
+    _saveUserConfig(config) {
         return amplify(USERCONFIG, config)
     },
 
-    SaveUserSettings(email, callback) {
-        let user = {
-            email: email
-        };
+    SaveUserSettings(userSettings, callback) {
         $.post(`${ServerBaseUrl}/users`, {
-            user: user
+            email: userSettings.email,
+            trackingTime: userSettings.trackingTime
         }).always(() => {
-            this.SaveConfig({
-                email: email
+            this._saveUserConfig({
+                email: userSettings.email,
+                trackingTime: userSettings.trackingTime
             });
         });
     }

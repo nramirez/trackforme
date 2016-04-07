@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener(
                 currentTracking: Store.LoadCurrentTracking()
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
-            Store.SaveUserSettings(request.email, sendResponse);
+            Store.SaveUserSettings(request.userSettings, sendResponse);
         } else {
             sendResponse('Error: Action not defined');
         }

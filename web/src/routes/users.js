@@ -13,17 +13,39 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    let user = req.body.user;
-    if (!user) {
-        res.status(500).send('User is required');
-    } else if (!user.email) {
-        res.status(500).send('Email is required');
+    let user = new User({
+        email: req.body.email,
+        trackingTime: req.body.trackingTime
+    });
+    if (!user.email || !user.trackingTime) {
+        res.status(500).send('email and trackingTime is required');
     } else {
-        user = new User(user);
-        user.save((err) => {
-            if (err) {
-                res.status(500).send('User already exist');
-            } else res.send(user);
+        User.findOne({
+            email: user.email
+        }, (err, userToFind) => {
+            if (err)
+                res.status(500).send('Error finding the user: ' + err);
+
+            if (!userToFind) {
+                let userToSave = new User(user);
+                userToSave.save((err) => {
+                    if (err)
+                        res.status(500).send('Error saving the user: ' + err);
+                    else
+                        res.send(user.email);
+                });
+            } else {
+                User.update({
+                    email: user.email
+                }, {
+                    trackingTime: user.trackingTime
+                }, (err, userUpdated) => {
+                    if (err)
+                        res.status(500).send('Error updating the user: ' + err);
+                    else
+                        res.send(userUpdated);
+                });
+            }
         });
     }
 });
@@ -44,6 +66,7 @@ router.get('/:email', (req, res) => {
                     res.send({
                         name: user.name,
                         email: user.email,
+                        trackingTime: user.trackingTime,
                         sites: sites
                     });
                 });

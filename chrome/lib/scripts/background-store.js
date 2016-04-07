@@ -27,11 +27,15 @@ const BackgroundStore = {
             action: Actions.LOADCURRENTTRACKING
         }, callback);
     },
+<<<<<<< 72d6f8caec9a8e894abd14d2196da9957750abf9
 
     SaveUserSettings(email) {
+=======
+    SaveUserSettings(userSettings) {
+>>>>>>> Saving and loading the user tracking time
         chrome.runtime.sendMessage({
             action: Actions.SAVEUSERSETTINGS,
-            email: email
+            userSettings: userSettings
         });
     }
 };

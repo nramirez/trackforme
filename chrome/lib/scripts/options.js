@@ -1,13 +1,23 @@
 import BackStore from './background-store';
 
-const setupEmail = (email) => document.getElementById('email-input').value = email;
+const setupUserSettings = (userSettings) => {
+    document.getElementById('email-input').value = userSettings.email;
+    document.getElementById('time-input').value = userSettings.trackingTime;
+    displaySites(response.config.sites);
+};
+
 const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 document.querySelector('#save-user-settings')
     .addEventListener('click', function(event) {
         let email = document.getElementById('email-input').value;
+        let trackingTime = document.getElementById('time-input').value;
+        let userSettings = {
+            email: email,
+            trackingTime: trackingTime
+        };
         if (validEmail.test(email)) {
-            BackStore.SaveUserSettings(email);
+            BackStore.SaveUserSettings(userSettings);
         } else {
             document.getElementById('email-error').innerHTML = 'Invalid email';
         }
@@ -45,6 +55,5 @@ const sideRow = (previewUrl, siteUrl) =>
   </tr>`;
 
 BackStore.Load(function(response) {
-    setupEmail(response.config.email);
-    displaySites(response.config.sites);
+    setupUserSettings(response.config);
 });
