@@ -63,6 +63,24 @@ app.get('/', (req, res) => {
 app.use('/users', usersRoutes);
 app.use('/trackings', trackingsRoutes);
 
+app.use((req, res, next) => {
+  res.status(404);
+
+  // respond with html
+  if (req.accepts('html')) {
+    res.render('404', { url: req.url });
+    return;
+  }
+
+  // reply with json
+  res.send({ error: 'Not found' });
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).render('500');
+});
+
 app.listen(PORT, () => {
   console.log('Server is listening on port: ', PORT);
 });
