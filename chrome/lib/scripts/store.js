@@ -31,13 +31,14 @@ const Store = {
         return amplify(CURRENTRACKING);
     },
 
-    SaveSites(sites, callback) {
+    SaveSites(trackings, callback) {
         let config = amplify(USERCONFIG);
-        if (!config || !config.email || !trackings || !trackings.length) {
+        console.log(trackings);
+        if (!config || !config.email || !trackings) {
             callback(false);
         } else {
             let trackingPayload = {
-                email: USEREMAIL,
+                email: config.email,
                 trackings: trackings
             };
             $.post(`${ServerBaseUrl}/sites`, {
