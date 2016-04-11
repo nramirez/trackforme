@@ -3,7 +3,7 @@ import BackStore from './background-store';
 const setupUserSettings = (userSettings) => {
     document.getElementById('email-input').value = userSettings.email;
     document.getElementById('time-input').value = userSettings.trackingTime;
-    displaySites(response.config.sites);
+    displaySites(userSettings.sites);
 };
 
 const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
