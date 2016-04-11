@@ -19,6 +19,10 @@ chrome.runtime.onMessage.addListener(
                 });
             });
         } else if (request.action === Actions.SAVESITES) {
+            tracker.reload();
+            chrome.tabs.getSelected(null, function(tab) {
+                chrome.tabs.reload(tab.id);
+            });
             Store.SaveSites(request.sites, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             sendResponse({
