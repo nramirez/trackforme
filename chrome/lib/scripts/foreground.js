@@ -40,11 +40,15 @@ const handleClick = (element) => {
         elementContent: element.innerHTML
     };
 
+    currentTracking[tracking.elementPath] = tracking;
+    //This will save the tracking inmediately in the localstorage
+    BackStore.SaveCurrentTracking(currentTracking);
+
     chrome.runtime.sendMessage({
         action: Actions.SNAPSHOT
     }, (response) => {
-        tracking.img = response.imgSrc;
-        currentTracking[tracking.elementPath] = tracking;
+        currentTracking[tracking.elementPath].img = response.imgSrc;
+        //This will update the saved tracking with the image url
         BackStore.SaveCurrentTracking(currentTracking);
     });
 }

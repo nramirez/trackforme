@@ -19,12 +19,19 @@ class TrackForMe {
 
     reload() {
         this.setIcon('default');
+        this.setBadge();
         this.removePopup();
     }
 
     removePopup() {
         chrome.browserAction.setPopup({
             popup: ''
+        });
+    }
+
+    setBadge(number) {
+        chrome.browserAction.setBadgeText({
+            text: '' + (number || '')
         });
     }
 

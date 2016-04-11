@@ -25,6 +25,8 @@ chrome.runtime.onMessage.addListener(
             });
             Store.SaveSites(request.sites, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
+            tracker.setBadge(Object.keys(request.currentTracking).length);
+
             sendResponse({
                 currentTracking: Store.SaveCurrentTracking(request.currentTracking)
             });
