@@ -1,35 +1,30 @@
-import BackStore from './background-store';
+import BackStore from './core/background-store';
 
 let config = {};
 let currentTracking = {};
-BackStore.Load(function(response) {
+BackStore.LoadUserSettings((response) => {
   config = response.config;
 });
 
-BackStore.LoadCurrentTracking(function(response) {
+BackStore.LoadCurrentTracking((response) => {
   currentTracking = response.currentTracking;
   console.log(currentTracking);
 });
 
 document.querySelector('.btn-done')
-  .addEventListener('click', function(event) {
+  .addEventListener('click', (event) => {
     console.log('the done', config);
     if (currentTracking) {
-      BackStore.SaveTrack(currentTracking, () => {
+      BackStore.PostTrackings(currentTracking, () => {
         chrome.tabs.create({
           url: chrome.extension.getURL('/views/options.html')
         });
-        //TODO: this is not what we want, this disables the whole stuff,
-        //and we won't be able to display the infor for the user in options.
-        //we need to manually reload the extension.
-        //Create a separate issue for this
-        //chrome.runtime.reload();
       });
     }
   });
 
 document.getElementById('btn-options')
-  .addEventListener('click', function() {
+  .addEventListener('click', () => {
     chrome.tabs.create({
       url: chrome.extension.getURL('/views/options.html')
     });

@@ -1,5 +1,5 @@
-import BackStore from './background-store';
-import Actions from './actions';
+import BackStore from './core/background-store';
+import Actions from './core/actions';
 
 let currentTracking = {};
 let prevElement = null;

@@ -1,7 +1,7 @@
 'use strict';
 
 import User from '../models/user.js';
-import Site from '../models/site.js';
+import Tracking from '../models/tracking.js';
 import TrackingActivity from '../core/trackingActivity.js';
 import express from 'express';
 import s3Handler from '../core/s3';
@@ -10,9 +10,9 @@ const router = express.Router();
 const s3 = new s3Handler();
 
 router.get('/', (req, res) => {
-    Site.find({}, function(err, sites) {
-        if (err) res.status(500).send('Error finding sites: ' + err);
-        res.send(sites);
+    Tracking.find({}, (err, trackings) => {
+        if (err) res.status(500).send('Error finding trackings: ' + err);
+        res.send(trackings);
     });
 });
 
@@ -35,17 +35,17 @@ router.post('/', (req, res) => {
                 let trackings = trackingPayload.trackings;
                 let keys = Object.keys(trackings);
                 keys.forEach(k => {
-                    var tracking = trackings[k];
+                    let tracking = trackings[k];
                     tracking.user = user;
-                    tracking = new Site(tracking);
-                    tracking.save((siteErr, saved) => {
-                        if (siteErr)
-                            res.status(500).send(`Error saving the sites: ${siteErr}`);
+                    tracking = new Tracking(tracking);
+                    tracking.save((trackingErr, saved) => {
+                        if (trackingErr)
+                            res.status(500).send(`Error saving the trackings: ${trackingErr}`);
                     });
                 });
             }
         });
-        res.send(`Sites saved`);
+        res.send(`Trackings saved`);
     }
 });
 
@@ -56,18 +56,15 @@ router.post('/image', (req, res) => {
         res.status(500).send('Image is required');
     } else {
         s3.postImage(image)
-            .then((img) => {
-                res.status(200).send(img.Location);
-            })
-            .catch((err) => {
-                res.status(500).send('Internal error: ' + err.stack);
-            });
+            .then((img) => res.status(200).send(img.Location))
+            .catch((err) => res.status(500).send('Internal error: ' + err.stack));
     }
 });
 
 router.get('/run', (req, res) => {
     let activity = new TrackingActivity();
-    activity.run().then(r => res.send(r))
+    activity.run()
+        .then(r => res.send(r))
         .catch(e => res.status(500).send(e.stack || e));
 });
 

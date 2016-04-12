@@ -1,16 +1,16 @@
 import Actions from './actions';
 
 const BackgroundStore = {
-    Load(callback) {
+    LoadUserSettings(callback) {
         chrome.runtime.sendMessage({
-            action: Actions.LOADCONFIG
+            action: Actions.LOADUSERSETTINGS
         }, callback);
     },
 
-    SaveTrack(sites, callback) {
+    PostTrackings(trackings, callback) {
         chrome.runtime.sendMessage({
-            action: Actions.SAVESITES,
-            sites: sites
+            action: Actions.POSTTRACKINGS,
+            trackings: trackings
         }, callback);
     },
 
@@ -32,6 +32,12 @@ const BackgroundStore = {
         chrome.runtime.sendMessage({
             action: Actions.SAVEUSERSETTINGS,
             userSettings: userSettings
+        });
+    },
+
+    RunTracking() {
+        chrome.runtime.sendMessage({
+            action: Actions.RUNTRACKING
         });
     }
 };

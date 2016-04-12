@@ -6,7 +6,7 @@ const USERCONFIG = 'USERCONFIG';
 const CURRENTRACKING = 'CURRENTRACKING';
 
 const Store = {
-    Load(callback) {
+    LoadUserSettings(callback) {
         //By default try to local storage, in case the ajax request fails
         let config = amplify(USERCONFIG) || {};
         if (config.email) {
@@ -22,16 +22,19 @@ const Store = {
         }
     },
 
+    //Save tracking in the local storage
     SaveCurrentTracking(trackingElements) {
         console.log('saving tracking in progress', trackingElements);
         return amplify(CURRENTRACKING, trackingElements);
     },
 
+    //Load tracking in the local storage
     LoadCurrentTracking() {
         return amplify(CURRENTRACKING);
     },
 
-    SaveSites(trackings, callback) {
+    //Persist trackings on the server
+    PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG);
         console.log(trackings);
         if (!config || !config.email || !trackings) {
@@ -41,7 +44,7 @@ const Store = {
                 email: config.email,
                 trackings: trackings
             };
-            $.post(`${ServerBaseUrl}/sites`, {
+            $.post(`${ServerBaseUrl}/trackings`, {
                 trackingPayload: trackingPayload
             }, (response) => {
                 console.log(response);
@@ -51,7 +54,7 @@ const Store = {
     },
 
     SaveImage(image, callback) {
-        $.post(`${ServerBaseUrl}/sites/image`, {
+        $.post(`${ServerBaseUrl}/trackings/image`, {
             image: image
         }, (url) => {
             callback(null, url);

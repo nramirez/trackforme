@@ -1,15 +1,15 @@
-import BackStore from './background-store';
+import BackStore from './core/background-store';
 
 const setupUserSettings = (userSettings) => {
     document.getElementById('email-input').value = userSettings.email;
     document.getElementById('time-input').value = userSettings.trackingTime;
-    displaySites(userSettings.sites);
+    displayTrackings(userSettings.trackings);
 };
 
 const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-document.querySelector('#save-user-settings')
-    .addEventListener('click', function(event) {
+document.getElementById('save-user-settings')
+    .addEventListener('click', (event) => {
         let email = document.getElementById('email-input').value;
         let trackingTime = document.getElementById('time-input').value;
         let userSettings = {
@@ -23,37 +23,42 @@ document.querySelector('#save-user-settings')
         }
     });
 
-document.querySelector('#email-input')
-    .addEventListener('focus', function(event) {
+document.getElementById('email-input')
+    .addEventListener('focus', (event) => {
         document.getElementById('email-error').innerHTML = '';
     });
 
-function displaySites(sites) {
+document.getElementById('tracking-tigger')
+    .addEventListener('click', (e) => {
+      BackStore.RunTracking();
+    });
+
+function displayTrackings(trackings) {
     let innerTable = '';
-    if (!sites || Object.keys(sites).length == 0) {
-        innerTable = '<tr><td colspan="2">Please add your sites.</td></tr>';
+    if (!trackings || Object.keys(trackings).length == 0) {
+        innerTable = '<tr><td colspan="2">Please add what you need to track. Watch how to do it in this video.</td></tr>';
     } else {
-        for (let k in sites) {
-            let site = sites[k];
-            innerTable += sideRow(site.img, site.url);
+        for (let k in trackings) {
+            let tracking = trackings[k];
+            innerTable += trackingRow(tracking.img, tracking.url);
         }
     }
-    document.getElementById('sites-tbody').innerHTML = innerTable;
+    document.getElementById('trackings-tbody').innerHTML = innerTable;
 }
 
-const sideRow = (previewUrl, siteUrl) =>
+const trackingRow = (imgUrl, url) =>
     `<tr>
     <td>
-      <img class="img-preview" src="${previewUrl}" />
+      <img class="img-preview" src="${imgUrl}" />
     </td>
     <td>
-      ${siteUrl}
+      ${url}
     </td>
     <td class="td-without-border">
       <button class="cancel-btn" type="button">X</button>
     </td>
   </tr>`;
 
-BackStore.Load(function(response) {
+BackStore.LoadUserSettings((response) => {
     setupUserSettings(response.config);
 });

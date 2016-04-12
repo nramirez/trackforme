@@ -2,22 +2,31 @@
   "name": "trackforme-extension",
   "version": "0.0.1",
   "description": "A chrome extnsion to track the changes of your favorite pages.",
+  "authors": [
+    "mejiamanuel57 <mejiamanuel57@gmail.com>",
+    "nramriez <ram.nazaret@gmail.com>",
+    "vetom <tomas.veras@me.com>",
+    "wOvalle <willyovalle16@gmail.com >",
+    "wistcc <wistcc@gmail.com>"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mejiamanuel57/trackforme.git"
+    "url": "https://github.com/nramirez/trackforme",
+    "name": "trackforme"
   },
-  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mejiamanuel57/trackforme/issues"
+    "url": "https://github.com/nramirez/trackforme/issues"
   },
-  "homepage": "https://github.com/mejiamanuel57/trackforme#readme",
+  "homepage": "https://github.com/nramirez/trackforme",
   "devDependencies": {
+    "babel-register": "^6.5.2",
     "babel-core": "^6.7.4",
+    "babel-polyfill": "^6.7.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-stage-0": "^6.5.0",
     "babelify": "^7.2.0",
