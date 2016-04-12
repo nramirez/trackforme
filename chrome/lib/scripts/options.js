@@ -8,8 +8,8 @@ const setupUserSettings = (userSettings) => {
 
 const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-document.querySelector('#save-user-settings')
-    .addEventListener('click', function(event) {
+document.getElementById('save-user-settings')
+    .addEventListener('click', (event) => {
         let email = document.getElementById('email-input').value;
         let trackingTime = document.getElementById('time-input').value;
         let userSettings = {
@@ -23,9 +23,14 @@ document.querySelector('#save-user-settings')
         }
     });
 
-document.querySelector('#email-input')
-    .addEventListener('focus', function(event) {
+document.getElementById('email-input')
+    .addEventListener('focus', (event) => {
         document.getElementById('email-error').innerHTML = '';
+    });
+
+document.getElementById('tracking-tigger')
+    .addEventListener('click', (e) => {
+      BackStore.RunTracking();
     });
 
 function displaySites(sites) {
@@ -54,6 +59,6 @@ const sideRow = (previewUrl, siteUrl) =>
     </td>
   </tr>`;
 
-BackStore.Load(function(response) {
+BackStore.LoadUserSettings(function(response) {
     setupUserSettings(response.config);
 });

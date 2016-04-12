@@ -2,7 +2,7 @@ import BackStore from './core/background-store';
 
 let config = {};
 let currentTracking = {};
-BackStore.Load(function(response) {
+BackStore.LoadUserSettings(function(response) {
   config = response.config;
 });
 
@@ -19,11 +19,6 @@ document.querySelector('.btn-done')
         chrome.tabs.create({
           url: chrome.extension.getURL('/views/options.html')
         });
-        //TODO: this is not what we want, this disables the whole stuff,
-        //and we won't be able to display the infor for the user in options.
-        //we need to manually reload the extension.
-        //Create a separate issue for this
-        //chrome.runtime.reload();
       });
     }
   });

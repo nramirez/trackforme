@@ -6,7 +6,7 @@ const USERCONFIG = 'USERCONFIG';
 const CURRENTRACKING = 'CURRENTRACKING';
 
 const Store = {
-    Load(callback) {
+    LoadUserSettings(callback) {
         //By default try to local storage, in case the ajax request fails
         let config = amplify(USERCONFIG) || {};
         if (config.email) {
@@ -22,21 +22,22 @@ const Store = {
         }
     },
 
-    //Save trackings in local storage
-    SaveCurrentTrackings(trackingElements) {
+    //Save tracking in the local storage
+    SaveCurrentTracking(trackingElements) {
         console.log('saving tracking in progress', trackingElements);
         return amplify(CURRENTRACKING, trackingElements);
     },
 
-    //Load trackings from local storage
+    //Load tracking in the local storage
     LoadCurrentTracking() {
         return amplify(CURRENTRACKING);
     },
 
-    //Persist Trackings in the server
+    //Presist trackings on the server
     PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG);
-        if (!config || !config.email || !trackings || !trackings.length) {
+        console.log(trackings);
+        if (!config || !config.email || !trackings) {
             callback(false);
         } else {
             let trackingPayload = {
@@ -61,19 +62,18 @@ const Store = {
 
     },
 
-    SaveConfig(config) {
+    _saveUserConfig(config) {
         return amplify(USERCONFIG, config)
     },
 
-    SaveUserSettings(email, callback) {
-        let user = {
-            email: email
-        };
+    SaveUserSettings(userSettings, callback) {
         $.post(`${ServerBaseUrl}/users`, {
-            user: user
+            email: userSettings.email,
+            trackingTime: userSettings.trackingTime
         }).always(() => {
-            this.SaveConfig({
-                email: email
+            this._saveUserConfig({
+                email: userSettings.email,
+                trackingTime: userSettings.trackingTime
             });
         });
     }

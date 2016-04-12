@@ -4,6 +4,7 @@
 import TrackForMe from './core/trackforme';
 import Actions from './core/actions';
 import Store from './core/store';
+import TrackingActivity from './core/TrackingActivity';
 
 let tracker = new TrackForMe();
 tracker.init();
@@ -12,8 +13,8 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.action === Actions.SNAPSHOT) {
             TakeSnapshot(sendResponse);
-        } else if (request.action === Actions.LOADCONFIG) {
-            Store.Load((response) => {
+        } else if (request.action === Actions.LOADUSERSETTINGS) {
+            Store.LoadUserSettings((response) => {
                 sendResponse({
                     config: response
                 });
@@ -36,12 +37,29 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, sendResponse);
+        } else if (request.action === Actions.RUNTRACKING) {
+          TrackingRunner().then(response => {
+            console.log('tracking completed', response);
+            sendResponse(response);
+          }).catch(err => {
+            console.log('Error running tracking', err);
+            sendResponse(err);
+          });
         } else {
             sendResponse('Error: Action not defined');
         }
         //http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
         return true;
     });
+
+const TrackingRunner = () => {
+  return new Promise((resolve, reject) {
+    var trackings = Store.Load((config) {
+      //Here we will later add notifications
+      new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
+    });
+  });
+};
 
 //Capture Handler
 function TakeSnapshot(sendResponse) {
