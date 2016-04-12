@@ -33,7 +33,7 @@ const BackgroundStore = {
             action: Actions.SAVEUSERSETTINGS,
             userSettings: userSettings
         });
-    }
+    },
 
     RunTracking() {
         chrome.runtime.sendMessage({

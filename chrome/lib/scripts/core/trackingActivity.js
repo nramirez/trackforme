@@ -32,7 +32,7 @@ class TrackingActivity {
     //After the trackings have been setTrackings
     //This method will iterate for all of then evaluating the changes
     //This method resolve the promise
-    evaluateTrackings(tracking) {
+    async evaluateTrackings(tracking) {
         return new Promise((resolve, reject) => {
             let tracker = new Tracker(tracking.url);
             tracker.fetchPage()

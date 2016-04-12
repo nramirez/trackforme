@@ -53,8 +53,8 @@ chrome.runtime.onMessage.addListener(
     });
 
 const TrackingRunner = () => {
-  return new Promise((resolve, reject) {
-    var trackings = Store.Load((config) {
+  return new Promise((resolve, reject) => {
+    Store.LoadUserSettings((config) => {
       //Here we will later add notifications
       new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
     });
@@ -62,7 +62,7 @@ const TrackingRunner = () => {
 };
 
 //Capture Handler
-function TakeSnapshot(sendResponse) {
+const TakeSnapshot = (sendResponse) => {
   chrome.tabs.captureVisibleTab(null, {},
     (image) => {
         Store.SaveImage(image, (err, imageUrl) => {
