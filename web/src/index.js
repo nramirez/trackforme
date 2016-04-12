@@ -9,7 +9,7 @@ import config from '../config';
 
 //Routes
 import usersRoutes from './routes/users';
-import sitesRoutes from './routes/sites';
+import trackingsRoutes from './routes/trackings';
 
 const localdb = 'mongodb://localhost:27017/trackforme';
 const devdb = 'Please a backup db';
@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', usersRoutes);
-app.use('/sites', sitesRoutes);
+app.use('/trackings', trackingsRoutes);
 
 app.listen(PORT, () => {
   console.log('Server is listening on port: ', PORT);

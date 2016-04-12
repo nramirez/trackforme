@@ -1,8 +1,8 @@
 'use strict';
 
 const TrackerStatus = {
-  UNEXISTING: `The element doesn't exist`,
-  CHANGED: 'Element content has changed',
+  UNEXISTING: `Element doesn't exist`,
+  CHANGED: 'Element has changed',
   NOCHANGED: `Element didn't change`
 };
 

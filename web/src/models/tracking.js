@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const Site = new mongoose.Schema({
+const Tracking = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -24,4 +24,4 @@ const Site = new mongoose.Schema({
   elementContent: String
 });
 
-export default mongoose.model('Sites', Site);
+export default mongoose.model('Trackings', Tracking);
