@@ -56,7 +56,7 @@ class TrackingActivity {
             let tracker = new Tracker(currentSite.url);
             tracker.fetchPage()
                 .then(f => {
-                    let status = tracker.checkElementStatus(currentSite.elementContent, 
+                    let status = tracker.checkElementStatus(currentSite.elementContent,
                         currentSite.elementPath);
                     this.siteUpdates.push(status);
                     this.evaluateSites(resolve, reject);

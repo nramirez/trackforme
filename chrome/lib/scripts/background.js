@@ -1,9 +1,9 @@
 /**
  * Init TrackForMe.
  */
-import TrackForMe from './core';
-import Actions from './actions';
-import Store from './store';
+import TrackForMe from './core/trackforme';
+import Actions from './core/actions';
+import Store from './core/store';
 
 let tracker = new TrackForMe();
 tracker.init();

@@ -1,4 +1,4 @@
-import BackStore from './background-store';
+import BackStore from './core/background-store';
 
 const setupUserSettings = (userSettings) => {
     document.getElementById('email-input').value = userSettings.email;

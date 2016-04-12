@@ -1,4 +1,4 @@
-import BackStore from './background-store';
+import BackStore from './core/background-store';
 
 let config = {};
 let currentTracking = {};
