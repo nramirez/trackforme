@@ -66,9 +66,18 @@ app.use('/trackings', trackingsRoutes);
 app.use((req, res, next) => {
   res.status(404);
 
+  const statusCode = 404;
+  const error = 'We couldn\'t find the page..';
+  const body = 'Sorry, but the page you are looking for was either not found or does not exist.';
+
   // respond with html
   if (req.accepts('html')) {
-    res.render('404', { url: req.url });
+    res.render('error', {
+      statusCode: statusCode,
+      error: error,
+      body: body
+    });
+
     return;
   }
 
@@ -77,8 +86,16 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).render('500');
+    console.error(err.stack);
+    const statusCode = err.statusCode || 500;
+    const error = err.error || 'Oops... Internal server error.';
+    const body = err.body || 'Sorry but something went really bad in our end.';
+
+    res.status(err.status || statusCode).render(statusCode, {
+      statusCode: statusCode,
+      error: error,
+      body: body
+    });
 });
 
 app.listen(PORT, () => {
