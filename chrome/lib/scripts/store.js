@@ -19,6 +19,13 @@ const Store = {
                 //Return config, either was loaded from the server or the local storage
                 callback(config);
             });
+        } else {
+            config = {
+                email: "",
+                trackingTime: "",
+                sites: this.LoadCurrentTracking()
+            };
+            callback(config);
         }
     },
 
@@ -72,6 +79,10 @@ const Store = {
                 email: userSettings.email,
                 trackingTime: userSettings.trackingTime
             });
+            let currentTracking = this.LoadCurrentTracking();
+            if (currentTracking) {
+                this.SaveSites(currentTracking);
+            }
         });
     }
 };
