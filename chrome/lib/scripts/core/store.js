@@ -19,6 +19,8 @@ const Store = {
                 //Return config, either was loaded from the server or the local storage
                 callback(config);
             });
+        } else {
+            callback(config);
         }
     },
 
@@ -35,9 +37,14 @@ const Store = {
 
     //Persist trackings on the server
     PostTrackings(trackings, callback) {
-        let config = amplify(USERCONFIG);
+        let config = amplify(USERCONFIG) || {};
         console.log(trackings);
-        if (!config || !config.email || !trackings) {
+        //without email, save it locally in the USERCONFIG
+        if (!config.email || !trackings) {
+            if (trackings) {
+                config.trackings = trackings;
+                this._saveUserConfig(config);
+            }
             callback(false);
         } else {
             let trackingPayload = {
@@ -48,6 +55,8 @@ const Store = {
                 trackingPayload: trackingPayload
             }, (response) => {
                 console.log(response);
+                //clean the currentTrackings to avoid duplications
+                this.SaveCurrentTracking(null);
                 callback(true);
             });
         }
@@ -67,15 +76,22 @@ const Store = {
     },
 
     SaveUserSettings(userSettings, callback) {
-        $.post(`${ServerBaseUrl}/users`, {
-            email: userSettings.email,
-            trackingTime: userSettings.trackingTime
-        }).always(() => {
-            this._saveUserConfig({
+        if (!userSettings.email) {
+            callback(false);
+        } else {
+            $.post(`${ServerBaseUrl}/users`, {
                 email: userSettings.email,
                 trackingTime: userSettings.trackingTime
+            }).always(() => {
+                this._saveUserConfig({
+                    email: userSettings.email,
+                    trackingTime: userSettings.trackingTime
+                });
+                //save the currentTrackings in the server
+                this.PostTrackings(this.LoadCurrentTracking());
+                callback(true);
             });
-        });
+        }
     }
 };
 

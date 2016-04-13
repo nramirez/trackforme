@@ -1,8 +1,10 @@
 import BackStore from './core/background-store';
 
 const setupUserSettings = (userSettings) => {
-    document.getElementById('email-input').value = userSettings.email;
-    document.getElementById('time-input').value = userSettings.trackingTime;
+    if (userSettings.email) {
+        document.getElementById('email-input').value = userSettings.email;
+        document.getElementById('time-input').value = userSettings.trackingTime;
+    }
     displayTrackings(userSettings.trackings);
 };
 
@@ -30,7 +32,7 @@ document.getElementById('email-input')
 
 document.getElementById('tracking-tigger')
     .addEventListener('click', (e) => {
-      BackStore.RunTracking();
+        BackStore.RunTracking();
     });
 
 function displayTrackings(trackings) {
