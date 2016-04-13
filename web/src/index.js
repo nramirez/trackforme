@@ -16,8 +16,6 @@ const localdb = 'mongodb://localhost:27017/trackforme';
 const devdb = 'Please a backup db';
 let dbReconnectionRetryTime = 1000;
 let currentDb = localdb;
-const router = express.Router();
-
 
 mongoose.connect(currentDb);
 
