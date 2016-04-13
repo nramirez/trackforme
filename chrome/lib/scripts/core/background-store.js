@@ -7,10 +7,10 @@ const BackgroundStore = {
         }, callback);
     },
 
-    PostTrackings(sites, callback) {
+    PostTrackings(trackings, callback) {
         chrome.runtime.sendMessage({
-            action: Actions.SAVESITES,
-            sites: sites
+            action: Actions.POSTTRACKINGS,
+            trackings: trackings
         }, callback);
     },
 

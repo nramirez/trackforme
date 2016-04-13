@@ -19,12 +19,12 @@ chrome.runtime.onMessage.addListener(
                     config: response
                 });
             });
-        } else if (request.action === Actions.SAVESITES) {
+        } else if (request.action === Actions.POSTTRACKINGS) {
             tracker.reload();
             chrome.tabs.getSelected(null, function(tab) {
                 chrome.tabs.reload(tab.id);
             });
-            Store.SaveSites(request.sites, sendResponse);
+            Store.PostTrackings(request.sites, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             tracker.setBadge(Object.keys(request.currentTracking).length);
 

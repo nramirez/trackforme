@@ -33,7 +33,7 @@ const Store = {
         return amplify(CURRENTRACKING);
     },
 
-    //Presist trackings on the server
+    //Persist trackings on the server
     PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG);
         console.log(trackings);

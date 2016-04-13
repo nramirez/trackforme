@@ -10,6 +10,7 @@ class TrackingActivity {
             throw 'Trackings required';
         }
         this.trackings = trackings;
+        this.gen = this.trackingsGenerator();
         //Determines the current tracking being evaluated
         this.trackingIndex = 0;
         //Push tracking changes to this variable,
@@ -20,19 +21,29 @@ class TrackingActivity {
     //This is the main process
     run() {
         return new Promise((resolve, reject) => {
-            this.trackings.forEach(t => {
-                if (!t.evaluated) {
-                    await this.evaluateTracking(t).catch(err => reject(err));
-                }
-            });
-            resolve(this.trackingUpdates)
+            trackingIterator(resolve, reject);
         });
+    }
+
+    trackingIterator(resolve, reject) {
+        let tracking = this.gen.next().value;
+        if (tracking) {
+            if (!tracking.evaluated) {
+                this.evaluateTracking()
+                    .then(() => this.trackingIterator(resolve, reject))
+                    .catch(err => reject(err));
+            } else {
+                this.trackingIterator(resolve, reject);
+            }
+        } else {
+            resolve(this.trackingUpdates)
+        }
     }
 
     //After the trackings have been setTrackings
     //This method will iterate for all of then evaluating the changes
     //This method resolve the promise
-    async evaluateTrackings(tracking) {
+    evaluateTracking(tracking) {
         return new Promise((resolve, reject) => {
             let tracker = new Tracker(tracking.url);
             tracker.fetchPage()
@@ -53,6 +64,14 @@ class TrackingActivity {
     //Get tracking for an specific url, that haven't been evaluated yet
     getTrackingsNotEvaluated(url) {
         return this.trackings.filter(t => !t.evaluated && t.url === url);
+    }
+
+    //Returns the currentTracking being evaluated and jump to the next one
+    * trackingsGenerator() {
+        while (this.trackingIndex < this.trackings.length) {
+            yield this.trackings[this.trackingIndex];
+            this.trackingIndex++;
+        }
     }
 }
 

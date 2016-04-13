@@ -2,20 +2,20 @@ import BackStore from './core/background-store';
 
 let config = {};
 let currentTracking = {};
-BackStore.LoadUserSettings(function(response) {
+BackStore.LoadUserSettings((response) => {
   config = response.config;
 });
 
-BackStore.LoadCurrentTracking(function(response) {
+BackStore.LoadCurrentTracking((response) => {
   currentTracking = response.currentTracking;
   console.log(currentTracking);
 });
 
 document.querySelector('.btn-done')
-  .addEventListener('click', function(event) {
+  .addEventListener('click', (event) => {
     console.log('the done', config);
     if (currentTracking) {
-      BackStore.SaveTrack(currentTracking, () => {
+      BackStore.PostTrackings(currentTracking, () => {
         chrome.tabs.create({
           url: chrome.extension.getURL('/views/options.html')
         });
@@ -24,7 +24,7 @@ document.querySelector('.btn-done')
   });
 
 document.getElementById('btn-options')
-  .addEventListener('click', function() {
+  .addEventListener('click', () => {
     chrome.tabs.create({
       url: chrome.extension.getURL('/views/options.html')
     });
