@@ -10,11 +10,14 @@ import config from '../config';
 //Routes
 import usersRoutes from './routes/users';
 import trackingsRoutes from './routes/trackings';
+import errorRoutes from './routes/errors';
 
 const localdb = 'mongodb://localhost:27017/trackforme';
 const devdb = 'Please a backup db';
 let dbReconnectionRetryTime = 1000;
 let currentDb = localdb;
+const router = express.Router();
+
 
 mongoose.connect(currentDb);
 
@@ -63,40 +66,26 @@ app.get('/', (req, res) => {
 app.use('/users', usersRoutes);
 app.use('/trackings', trackingsRoutes);
 
+//If we got here, we couldn't find the route
 app.use((req, res, next) => {
-  res.status(404);
+  const err = {
+    statusCode: 404,
+    error: 'We couldn\'t find the page..',
+    body: 'Sorry, but the page you are looking for was either not found or does not exist.'
+  };
 
-  const statusCode = 404;
-  const error = 'We couldn\'t find the page..';
-  const body = 'Sorry, but the page you are looking for was either not found or does not exist.';
-
-  // respond with html
-  if (req.accepts('html')) {
-    res.render('error', {
-      statusCode: statusCode,
-      error: error,
-      body: body
-    });
-
-    return;
-  }
-
-  // reply with json
-  res.send({ error: 'Not found' });
+  req.url = '/errors';
+  req.body.err = err;
+  next();
 });
 
+//Global error handler
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    const statusCode = err.statusCode || 500;
-    const error = err.error || 'Oops... Internal server error.';
-    const body = err.body || 'Sorry but something went really bad in our end.';
-
-    res.status(err.status || statusCode).render(statusCode, {
-      statusCode: statusCode,
-      error: error,
-      body: body
-    });
+  req.url = '/errors';
+  next();
 });
+
+app.use('/errors', errorRoutes);
 
 app.listen(PORT, () => {
   console.log('Server is listening on port: ', PORT);
