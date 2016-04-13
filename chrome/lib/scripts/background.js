@@ -1,9 +1,10 @@
 /**
  * Init TrackForMe.
  */
-import TrackForMe from './core';
-import Actions from './actions';
-import Store from './store';
+import TrackForMe from './core/trackforme';
+import Actions from './core/actions';
+import Store from './core/store';
+import TrackingActivity from './core/TrackingActivity';
 
 let tracker = new TrackForMe();
 tracker.init();
@@ -12,18 +13,18 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.action === Actions.SNAPSHOT) {
             TakeSnapshot(sendResponse);
-        } else if (request.action === Actions.LOADCONFIG) {
-            Store.Load((response) => {
+        } else if (request.action === Actions.LOADUSERSETTINGS) {
+            Store.LoadUserSettings((response) => {
                 sendResponse({
                     config: response
                 });
             });
-        } else if (request.action === Actions.SAVESITES) {
+        } else if (request.action === Actions.POSTTRACKINGS) {
             tracker.reload();
             chrome.tabs.getSelected(null, function(tab) {
                 chrome.tabs.reload(tab.id);
             });
-            Store.SaveSites(request.sites, sendResponse);
+            Store.PostTrackings(request.trackings, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             tracker.setBadge(Object.keys(request.currentTracking).length);
 
@@ -36,6 +37,14 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, sendResponse);
+        } else if (request.action === Actions.RUNTRACKING) {
+          TrackingRunner().then(response => {
+            console.log('tracking completed', response);
+            sendResponse(response);
+          }).catch(err => {
+            console.log('Error running tracking', err);
+            sendResponse(err);
+          });
         } else {
             sendResponse('Error: Action not defined');
         }
@@ -43,8 +52,17 @@ chrome.runtime.onMessage.addListener(
         return true;
     });
 
+const TrackingRunner = () => {
+  return new Promise((resolve, reject) => {
+    Store.LoadUserSettings((config) => {
+      //Here we will later add notifications
+      new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
+    });
+  });
+};
+
 //Capture Handler
-function TakeSnapshot(sendResponse) {
+const TakeSnapshot = (sendResponse) => {
   chrome.tabs.captureVisibleTab(null, {},
     (image) => {
         Store.SaveImage(image, (err, imageUrl) => {

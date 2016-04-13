@@ -1,7 +1,7 @@
 'use strict';
 
 import User from '../models/user.js';
-import Site from '../models/site.js';
+import Tracking from '../models/tracking.js';
 import express from 'express';
 const router = express.Router();
 
@@ -59,15 +59,15 @@ router.get('/:email', (req, res) => {
         }, (err, user) => {
             if (err || !user) res.status(500).send('Error finding the user: ' + err);
             else {
-                Site.find({
+                Tracking.find({
                     user: user._id
-                }, (err, sites) => {
-                    if (err) res.status(500).send('Error finding the sites: ' + err);
+                }, (err, trackings) => {
+                    if (err) res.status(500).send('Error finding the trackings: ' + err);
                     res.send({
                         name: user.name,
                         email: user.email,
                         trackingTime: user.trackingTime,
-                        sites: sites
+                        trackings: trackings
                     });
                 });
             }
