@@ -21,7 +21,7 @@ class TrackingActivity {
     //This is the main process
     run() {
         return new Promise((resolve, reject) => {
-            trackingIterator(resolve, reject);
+            this.trackingIterator(resolve, reject);
         });
     }
 
@@ -29,9 +29,11 @@ class TrackingActivity {
         let tracking = this.gen.next().value;
         if (tracking) {
             if (!tracking.evaluated) {
-                this.evaluateTracking()
-                    .then(() => this.trackingIterator(resolve, reject))
-                    .catch(err => reject(err));
+                this.evaluateTracking(tracking)
+                    .then((status) => {
+                        this.trackingUpdates.push(...status);
+                        this.trackingIterator(resolve, reject)
+                    }).catch(err => reject(err));
             } else {
                 this.trackingIterator(resolve, reject);
             }
@@ -47,17 +49,16 @@ class TrackingActivity {
         return new Promise((resolve, reject) => {
             let tracker = new Tracker(tracking.url);
             tracker.fetchPage()
-                .then(f => {
+                .then(() => {
                     //This includes the current tracking
                     let trackings = this.getTrackingsNotEvaluated(tracking.url);
 
-                    let status = moreTrackings.map(t => tracker.checkElementStatus(t.elementContent, t.elementPath));
+                    let status = trackings.map(t => tracker.checkElementStatus(t.elementContent, t.elementPath));
 
                     trackings.forEach(t => t.evaluated = true);
 
-                    this.trackingUpdates.push(...status);
-                })
-                .catch(err => reject(err));
+                    resolve(status);
+                }).catch(err => reject(err));
         });
     }
 

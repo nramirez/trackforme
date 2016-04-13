@@ -7,7 +7,7 @@ import $ from 'jquery';
 class Tracker {
   constructor(url) {
     if (!url) {
-      throw 'Site url is required';
+      throw 'Url is required';
     }
     this.url = url;
   }
@@ -41,7 +41,7 @@ class Tracker {
       };
     }
 
-    if (lastContent !== currentElement.innerHTML) {
+    if (lastContent !== currentElement.html()) {
       return {
         changed: true,
         reason: status.CHANGED

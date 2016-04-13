@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(
             chrome.tabs.getSelected(null, function(tab) {
                 chrome.tabs.reload(tab.id);
             });
-            Store.PostTrackings(request.sites, sendResponse);
+            Store.PostTrackings(request.trackings, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             tracker.setBadge(Object.keys(request.currentTracking).length);
 
