@@ -5,12 +5,12 @@ import gulp from 'gulp';
 import browserify from 'browserify';
 import babelify from 'babelify';
 import run from 'run-sequence';
-import rimraf from 'rimraf';
 import shell from 'gulp-shell';
 import server from 'gulp-live-server';
 import babel from 'gulp-babel';
 import bower from 'gulp-bower';
 import copy from 'gulp-copy';
+import del from 'del';
 
 const paths = {
   src: './src',
@@ -66,7 +66,7 @@ gulp.task('restart', () => {
 
 //Clean the app destination, to prepare for new files
 gulp.task('clean', cb => {
-  rimraf(paths.dest, cb);
+  return del(paths.dest);
 });
 
 //Transform back-end ES6 to ES5
