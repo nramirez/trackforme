@@ -2,7 +2,7 @@
 
 import Tracker from './tracker';
 import BackStore from './background-store';
-import "babel-polyfill";
+import 'babel-polyfill';
 
 class TrackingActivity {
     constructor(trackings) {
