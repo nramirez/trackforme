@@ -26,22 +26,38 @@ class TrackingActivity {
     //Here resides the filter for the trackings that will be evaluated
     setTrackings() {
         return new Promise((resolve, reject) => {
-            //Add the filter criteria for the trackings to inspect
-            Tracking.find({}, (err, trackings) => {
+            Tracking.aggregate([{
+                $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            }], function(err, trackings) {
                 if (err) {
                     reject(err);
                 } else {
-                    this.trackings = trackings;
+                    var trackingsToTrack = this.filterTrackings(trackings);
+                    this.trackings = trackingsToTrack;
                     this.currentTrackingsGen = this.trackingsGenerator();
-                    resolve(trackings)
+                    resolve(trackingsToTrack)
                 }
             });
         });
     }
 
+    //filtering the trackings using the criteria
+    filterTrackings(trackings) {
+        return trackings.filter((current) => {
+            var currentDate = new Date;
+            var diff = (currentDate.getTime() - current.lastScanDate.getTime()) / 60000; //difference in minutes
+            return diff >= current.user[0].trackingTime;
+        });
+    }
+
     //Returns the currentTracking being evaluated and jump to the next one
     * trackingsGenerator() {
-        while(this.trackingIndex < this.trackings.length) {
+        while (this.trackingIndex < this.trackings.length) {
             yield this.trackings[this.trackingIndex];
             this.trackingIndex++;
         }
