@@ -6,7 +6,7 @@
     "mejiamanuel57 <mejiamanuel57@gmail.com>",
     "nramriez <ram.nazaret@gmail.com>",
     "vetom <tomas.veras@me.com>",
-    "wOvalle <willyovalle16@gmail.com >",
+    "wovalle <willyovalle16@gmail.com >",
     "wistcc <wistcc@gmail.com>"
   ],
   "main": "index.js",
@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "amplify-store": "0.0.5",
-    "jquery": "^2.2.1"
+    "jquery": "^2.2.1",
+    "request": "^2.70.0"
   }
 }
