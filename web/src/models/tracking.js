@@ -19,7 +19,10 @@ const Tracking = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  deleted: Boolean,
+  deleted: {
+    type:Boolean,
+    default: false
+  },
   elementPath: String,
   elementContent: String
 });

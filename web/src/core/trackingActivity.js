@@ -27,11 +27,20 @@ class TrackingActivity {
     setTrackings() {
         return new Promise((resolve, reject) => {
             Tracking.aggregate([{
+                $match: {
+                    enabled: true,
+                    deleted: false
+                }
+            }, {
                 $lookup: {
                     from: 'users',
                     localField: 'user',
                     foreignField: '_id',
                     as: 'user'
+                }
+            }, {
+                $sort: {
+                    lastScanDate: 1
                 }
             }], function(err, trackings) {
                 if (err) {
