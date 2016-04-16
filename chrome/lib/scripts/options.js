@@ -19,6 +19,7 @@ document.getElementById('save-user-settings')
             trackingTime: trackingTime
         };
         if (validEmail.test(email)) {
+            displayTrackingTimeWarning(trackingTime);
             BackStore.SaveUserSettings(userSettings);
         } else {
             document.getElementById('email-error').innerHTML = 'Invalid email';
@@ -60,6 +61,14 @@ const trackingRow = (imgUrl, url) =>
       <button class="cancel-btn" type="button">X</button>
     </td>
   </tr>`;
+
+const displayTrackingTimeWarning = (trackingTime) => {
+    document.getElementById('tracking-time-warning').classList.remove('hide');
+    const part1 = '<p>  We will track your sites every <b> ' + trackingTime;
+    const part2 = ' </b> minutes if your browser is open. Otherwise, we will notify as soon as we can by email. </p> ';
+    const warning = part1 + part2;
+    document.getElementById('tracking-time-warning').innerHTML = warning;
+};
 
 BackStore.LoadUserSettings((response) => {
     setupUserSettings(response.config);
