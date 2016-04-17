@@ -42,8 +42,26 @@ router.post('/', (req, res) => {
                 }, (err, userUpdated) => {
                     if (err)
                         res.status(500).send('Error updating the user: ' + err);
-                    else
-                        res.send(userUpdated);
+                    else {
+                        if (userToFind.trackingTime !== parseInt(req.body.trackingTime)) {
+                            Tracking.update({
+                                user: userToFind._id,
+                                isDeleted : false
+                            }, {
+                                checkFrequency: user.trackingTime
+                            }, {
+                                multi: true
+                            }, (err, updatedTrackings) => {
+                                if (err)
+                                    res.status(500).send('Error updating the user\'s trackings: ' + err);
+                                else {
+                                    res.send(userUpdated);
+                                }
+                            });
+                        } else {
+                            res.send(userUpdated);
+                        }
+                    }
                 });
             }
         });

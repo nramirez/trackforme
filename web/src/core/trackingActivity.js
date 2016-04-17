@@ -26,8 +26,13 @@ class TrackingActivity {
     //Here resides the filter for the trackings that will be evaluated
     setTrackings() {
         return new Promise((resolve, reject) => {
-            //Add the filter criteria for the trackings to inspect
-            Tracking.find({}, (err, trackings) => {
+            Tracking.find({
+                $where: function() {
+                    if (this.isDeleted || !this.isEnabled) return false;
+                    var diff = ((new Date()).getTime() - this.lastScanDate.getTime()) / 60000; //difference in minutes
+                    return diff >= this.checkFrequency;
+                }
+            }, (err, trackings) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -41,7 +46,7 @@ class TrackingActivity {
 
     //Returns the currentTracking being evaluated and jump to the next one
     * trackingsGenerator() {
-        while(this.trackingIndex < this.trackings.length) {
+        while (this.trackingIndex < this.trackings.length) {
             yield this.trackings[this.trackingIndex];
             this.trackingIndex++;
         }

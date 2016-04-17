@@ -37,6 +37,7 @@ router.post('/', (req, res) => {
                 keys.forEach(k => {
                     let tracking = trackings[k];
                     tracking.user = user;
+                    tracking.checkFrequency = user.trackingTime;
                     tracking = new Tracking(tracking);
                     tracking.save((trackingErr, saved) => {
                         if (trackingErr)
