@@ -4,7 +4,7 @@
 import TrackForMe from './core/trackforme';
 import Actions from './core/actions';
 import Store from './core/store';
-import TrackingActivity from './core/TrackingActivity';
+import TrackingRunner from './core/trackingRunner';
 
 let currentTabId;
 let tracker = new TrackForMe();
@@ -80,28 +80,9 @@ const ReloadExtension = (reloadCurrentTab = false) => {
         chrome.tabs.reload(currentTabId);
 };
 
-const TrackingRunner = () => {
-    return new Promise((resolve, reject) => {
-        Store.LoadUserSettings((config) => {
-            //Here we will later add notifications
-            new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
-        });
-    });
-};
-
 //Capture Handler
-const TakeSnapshot = (sendResponse) => {
-    chrome.tabs.captureVisibleTab(null, {},
-        (image) => {
-            Store.SaveImage(image, (err, imageUrl) => {
-                if (err) sendResponse({
-                    err: err
-                });
-                else
-                    sendResponse({
-                        imgSrc: imageUrl
-                    });
-            });
-        }
-    );
-};
+const TakeSnapshot = (sendResponse) => chrome.tabs.captureVisibleTab(null, {},
+    (image) => Store.SaveImage(image, (err, imageUrl) => sendResponse({
+        err: err,
+        imgSrc: imageUrl
+    })));

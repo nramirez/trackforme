@@ -1,28 +1,17 @@
 'use strict';
 
-import request from 'request';
-import status from './trackerStatus';
-import { jsdom } from 'jsdom';
+import status from './trackingStatus';
 
-class Tracker {
+class BaseTracker {
     constructor(url) {
         if (!url) {
-            throw 'Site is required';
+            throw 'Url is required';
         }
         this.url = url;
     }
 
-    fetchPage() {
-        return new Promise((resolve, reject) => {
-            request(this.url, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    this.document = jsdom(body);
-                    resolve(true);
-                }
-            });
-        });
+    getElementByPath(path) {
+        throw 'This must be done in the concreate implementation';
     }
 
     checkElementStatus(lastContent, path) {
@@ -32,7 +21,7 @@ class Tracker {
         if (!path)
             throw 'path is required';
 
-        const currentElement = this.document.querySelector(path);
+        const currentElement = this.getElementByPath(path);
 
         if (!currentElement) {
             return {
@@ -55,4 +44,4 @@ class Tracker {
     }
 }
 
-export default Tracker;
+export default BaseTracker;

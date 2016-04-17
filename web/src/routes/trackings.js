@@ -1,13 +1,17 @@
 'use strict';
 
-import User from '../models/user.js';
-import Tracking from '../models/tracking.js';
-import TrackingActivity from '../core/trackingActivity.js';
+import mongoose from 'mongoose';
 import express from 'express';
 import s3Handler from '../core/s3';
+import ServerTrackingRunner from '../../../common/build/serverTrackingRunner.js';
+import userModel from '../../../common/build/models/user.js';
+import trackingModel from '../../../common/build/models/tracking.js';
+import ServerStore from '../../../common/build/serverStore.js';
 
 const router = express.Router();
 const s3 = new s3Handler();
+const User = userModel(mongoose);
+const Tracking = trackingModel(mongoose);
 
 router.get('/', (req, res) => {
     Tracking.find({}, (err, trackings) => {
@@ -57,16 +61,16 @@ router.post('/image', (req, res) => {
         res.status(500).send('Image is required');
     } else {
         s3.postImage(image)
-            .then((img) => res.status(200).send(img.Location))
-            .catch((err) => res.status(500).send('Internal error: ' + err.stack));
+            .then(img => res.status(200).send(img.Location))
+            .catch(err => res.status(500).send('Internal error: ' + err.stack));
     }
 });
 
 router.get('/run', (req, res) => {
-    let activity = new TrackingActivity();
-    activity.run()
-        .then(r => res.send(r))
-        .catch(e => res.status(500).send(e.stack || e));
+    new ServerTrackingRunner(ServerStore(Tracking))
+        .run()
+        .then(update => res.status(200).send(update))
+        .catch(err => res.status(500).send(err.stack))
 });
 
 export default router;

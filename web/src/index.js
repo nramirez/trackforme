@@ -49,9 +49,11 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 app.use(morgan('dev'));
+
 app.use(bodyParser.json({
   limit: config.maxScreenshotSize
 }));
+
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: config.maxScreenshotSize

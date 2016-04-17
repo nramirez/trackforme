@@ -72,7 +72,7 @@ const Store = {
     },
 
     _saveUserConfig(config) {
-        return amplify(USERCONFIG, config)
+        return amplify(USERCONFIG, config);
     },
 
     SaveUserSettings(userSettings, callback) {
@@ -88,10 +88,30 @@ const Store = {
                     trackingTime: userSettings.trackingTime
                 });
                 //save the currentTrackings in the server
-                this.PostTrackings(this.LoadCurrentTracking());
-                callback(true);
+                this.PostTrackings(this.LoadCurrentTracking(), callback);
             });
         }
+    },
+
+    // Use for the tracking activity to update the lastScanDate and the Status
+    updateTrackingsStatus(trackings) {
+        let config = amplify(USERCONFIG);
+
+        if (!config.trackings || config.trackings.length === 0)
+            return;
+
+        trackings.forEach(tracking => {
+            let configTracking = config.trackings.find(t => t.elementPath === tracking.elementPath);
+            if (configTracking) {
+                configTracking.status = tracking.status;
+                configTracking.lastScanDate = tracking.lastScanDate;
+            }
+        });
+
+        console.log('trackings updated', trackings);
+
+        this._saveUserConfig(config);
+        //TODO: Should we post the updates to the server?
     }
 };
 

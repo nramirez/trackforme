@@ -1,9 +1,13 @@
 'use strict';
 
-import User from '../models/user.js';
-import Tracking from '../models/tracking.js';
+import mongoose from 'mongoose';
 import express from 'express';
+import userModel from '../../../common/build/models/user.js';
+import trackingModel from '../../../common/build/models/tracking.js';
+
 const router = express.Router();
+const User = userModel(mongoose);
+const Tracking = trackingModel(mongoose);
 
 router.get('/', (req, res) => {
     User.find({}, function(err, saved) {

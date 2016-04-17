@@ -1,21 +1,22 @@
 'use strict';
 
-import Tracker from './tracker';
-import BackStore from './background-store';
 import 'babel-polyfill';
 
 class TrackingActivity {
-    constructor(trackings) {
-        if (!trackings || trackings.length === 0) {
+    constructor(trackings, store, tracker) {
+        if (!trackings || trackings.length === 0)
             throw 'Trackings required';
-        }
+
+        if (!store)
+            throw 'Required store';
+
+        this.Tracker = tracker;
+
+        this.Store = store;
         this.trackings = trackings;
         this.currentTrackingsGen = this.trackingsGenerator();
         //Determines the current tracking being evaluated
         this.trackingIndex = 0;
-        //Push tracking changes to this variable,
-        //which at the end will be the response
-        this.trackingUpdates = [];
     }
 
     //This is the main process
@@ -25,20 +26,20 @@ class TrackingActivity {
         });
     }
 
+    // Handle the iterations through the trackings
     trackingIterator(resolve, reject) {
         let tracking = this.currentTrackingsGen.next().value;
         if (tracking) {
             if (!tracking.evaluated) {
                 this.evaluateTracking(tracking)
-                    .then((status) => {
-                        this.trackingUpdates.push(...status);
+                    .then(() => {
                         this.trackingIterator(resolve, reject);
                     }).catch(err => reject(err));
             } else {
                 this.trackingIterator(resolve, reject);
             }
         } else {
-            resolve(this.trackingUpdates)
+            resolve();
         }
     }
 
@@ -47,19 +48,29 @@ class TrackingActivity {
     //This method resolve the promise
     evaluateTracking(tracking) {
         return new Promise((resolve, reject) => {
-            let tracker = new Tracker(tracking.url);
+            let tracker = new this.Tracker(tracking.url);
             tracker.fetchPage()
                 .then(() => {
                     //This includes the current tracking
                     let trackings = this.getTrackingsNotEvaluated(tracking.url);
 
-                    let status = trackings.map(t => tracker.checkElementStatus(t.elementContent, t.elementPath));
+                    trackings.forEach(t => {
+                        t.status = tracker.checkElementStatus(t.elementContent, t.elementPath);
+                        t.evaluated = true;
+                        t.lastScanDate = new Date();
+                    });
 
-                    trackings.forEach(t => t.evaluated = true);
+                    this.updateTrackingsStatus(trackings);
 
-                    resolve(status);
+                    resolve();
                 }).catch(err => reject(err));
         });
+    }
+
+    // This will be use to persist the information about the tracking status
+    // The store is responsible to persist it in a database or localstorage
+    updateTrackingsStatus(trackings) {
+        this.Store.updateTrackingsStatus(trackings);
     }
 
     //Get tracking for an specific url, that haven't been evaluated yet

@@ -1,9 +1,9 @@
 'use strict';
 
-const TrackerStatus = {
+const TrackingStatus = {
   UNEXISTING: `The element doesn't exist`,
   CHANGED: 'Element content has changed',
   NOCHANGED: `Element didn't change`
 };
 
-export default TrackerStatus;
+export default TrackingStatus;

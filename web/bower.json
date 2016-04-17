@@ -9,7 +9,7 @@
   "description": "",
   "main": "",
   "moduleType": [],
-  "license": "MIT",
+  "license": "ISC",
   "private": true,
   "ignore": [
     "**/.*",
