@@ -10,6 +10,7 @@ import config from '../config';
 //Routes
 import usersRoutes from './routes/users';
 import trackingsRoutes from './routes/trackings';
+import errorRoutes from './routes/errors';
 
 const localdb = 'mongodb://localhost:27017/trackforme';
 const devdb = 'Please a backup db';
@@ -45,7 +46,7 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-app.use('/', express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 app.use(morgan('dev'));
 app.use(bodyParser.json({
@@ -62,6 +63,27 @@ app.get('/', (req, res) => {
 
 app.use('/users', usersRoutes);
 app.use('/trackings', trackingsRoutes);
+
+//If we got here, we couldn't find the route
+app.use((req, res, next) => {
+  const err = {
+    statusCode: 404,
+    error: 'We couldn\'t find the page..',
+    body: 'Sorry, but the page you are looking for was either not found or does not exist.'
+  };
+
+  req.url = '/errors';
+  req.body.err = err;
+  next();
+});
+
+//Global error handler
+app.use((err, req, res, next) => {
+  req.url = '/errors';
+  next();
+});
+
+app.use('/errors', errorRoutes);
 
 app.listen(PORT, () => {
   console.log('Server is listening on port: ', PORT);

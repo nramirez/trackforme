@@ -27,7 +27,23 @@
     box-shadow: 0 8px 9px -6px rgba(0,0,0,.5);
     border: 1px solid #D3D3D3;
 }
+
 #carousel-example-generic{
     box-shadow: 0 8px 9px -6px rgba(0,0,0,.5);
     border: 1px solid #D3D3D3;
+}
+
+.error {
+  margin: 30px auto;
+  text-align: center;
+}
+
+.error-code {
+  bottom: 60%;
+  font-size: 96px;
+  line-height: 100px;
+}
+
+.error-desc {
+  font-size: 12px;
 }
