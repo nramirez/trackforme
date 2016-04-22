@@ -7,5 +7,13 @@
       "bucket": "trackforme"
     }
   },
+  "Facebook": {
+    "app_id": "1035253376569620",
+    "secret": "11b5d7d4e59d91a28caf554bc67ea3ce"
+  },
+  "Google":{
+    "client_id": "324546451913-5e6l3oj749vdcr5k0pmrblc5jnfvhd0t.apps.googleusercontent.com",
+    "secret": "9tpGiYZ0TByPbjhBLDC85Hov"
+  }
   "maxScreenshotSize" : "5mb"
 }
