@@ -39,6 +39,18 @@ const BackgroundStore = {
         chrome.runtime.sendMessage({
             action: Actions.RUNTRACKING
         });
+    },
+
+    StartTracking() {
+        chrome.runtime.sendMessage({
+            action: Actions.STARTTRACKING
+        });
+    },
+
+    IsTracking(callback) {
+        chrome.runtime.sendMessage({
+            action: Actions.ISTRACKING
+        }, callback);
     }
 };
 

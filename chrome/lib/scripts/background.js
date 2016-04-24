@@ -7,7 +7,6 @@ import Store from './core/store';
 import TrackingActivity from './core/TrackingActivity';
 
 let tracker = new TrackForMe();
-tracker.init();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -38,13 +37,20 @@ chrome.runtime.onMessage.addListener(
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, sendResponse);
         } else if (request.action === Actions.RUNTRACKING) {
-          TrackingRunner().then(response => {
-            console.log('tracking completed', response);
-            sendResponse(response);
-          }).catch(err => {
-            console.log('Error running tracking', err);
-            sendResponse(err);
-          });
+            TrackingRunner().then(response => {
+                console.log('tracking completed', response);
+                sendResponse(response);
+            }).catch(err => {
+                console.log('Error running tracking', err);
+                sendResponse(err);
+            });
+        } else if (request.action === Actions.STARTTRACKING) {
+            tracker.startTracking();
+            return false;
+        } else if (request.action === Actions.ISTRACKING) {
+            sendResponse({
+                isTracking: tracker.isTracking()
+            });
         } else {
             sendResponse('Error: Action not defined');
         }
@@ -53,25 +59,27 @@ chrome.runtime.onMessage.addListener(
     });
 
 const TrackingRunner = () => {
-  return new Promise((resolve, reject) => {
-    Store.LoadUserSettings((config) => {
-      //Here we will later add notifications
-      new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
+    return new Promise((resolve, reject) => {
+        Store.LoadUserSettings((config) => {
+            //Here we will later add notifications
+            new TrackingActivity(config.trackings).run().then(resolve).catch(reject);
+        });
     });
-  });
 };
 
 //Capture Handler
 const TakeSnapshot = (sendResponse) => {
-  chrome.tabs.captureVisibleTab(null, {},
-    (image) => {
-        Store.SaveImage(image, (err, imageUrl) => {
-            if(err) sendResponse({err: err});
-            else
-                sendResponse({
-                    imgSrc: imageUrl
+    chrome.tabs.captureVisibleTab(null, {},
+        (image) => {
+            Store.SaveImage(image, (err, imageUrl) => {
+                if (err) sendResponse({
+                    err: err
                 });
-        });
-    }
-  );
+                else
+                    sendResponse({
+                        imgSrc: imageUrl
+                    });
+            });
+        }
+    );
 };

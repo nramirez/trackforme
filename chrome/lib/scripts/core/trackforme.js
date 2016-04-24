@@ -2,13 +2,18 @@
  * TrackForMe.
  */
 class TrackForMe {
-    init() {
-        let self = this;
-        chrome.browserAction.onClicked.addListener(function() {
-            self.showPopup();
-            self.setIcon('active');
-            self.initForeground();
-        });
+    constructor() {
+        this._isTracking = false;
+    }
+
+    startTracking() {
+        this._isTracking = true;
+        this.setIcon('active');
+        this.initForeground();
+    }
+
+    isTracking() {
+        return this._isTracking;
     }
 
     showPopup() {
@@ -20,13 +25,7 @@ class TrackForMe {
     reload() {
         this.setIcon('default');
         this.setBadge();
-        this.removePopup();
-    }
-
-    removePopup() {
-        chrome.browserAction.setPopup({
-            popup: ''
-        });
+        this.isTracking = false;
     }
 
     setBadge(number) {

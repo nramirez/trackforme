@@ -5,6 +5,13 @@ BackStore.LoadUserSettings((response) => {
     config = response.config;
 });
 
+BackStore.IsTracking((response) => {
+    if (response.isTracking) {
+        document.getElementById('isNotTrackingBody').classList.add('none');
+        document.getElementById('isTrackingBody').classList.remove('none');
+    }
+});
+
 document.getElementById('btn-done').addEventListener('click', event => submitTrackings());
 
 document.getElementById('btn-options')
@@ -13,6 +20,11 @@ document.getElementById('btn-options')
             url: chrome.extension.getURL('/views/options.html')
         });
     });
+
+document.getElementById('btn-start').addEventListener('click', () => {
+    BackStore.StartTracking();
+    window.close();
+});
 
 const submitTrackings = () => {
     BackStore.LoadCurrentTracking((response) => {
