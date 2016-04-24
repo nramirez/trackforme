@@ -58,12 +58,12 @@ const trackingRow = (imgUrl, url) =>
       ${url}
     </td>
     <td class="td-without-border">
-      <button class="cancel-btn" type="button">X</button>
+      <button class="btn btn-danger" type="button">X</button>
     </td>
   </tr>`;
 
 const displayTrackingTimeWarning = (trackingTime) => {
-    document.getElementById('tracking-time-warning').classList.remove('hide');
+    document.getElementById('tracking-time-warning').classList.remove('none');
     const part1 = '<p>  We will track your sites every <b> ' + trackingTime;
     const part2 = ' </b> minutes if your browser is open. Otherwise, we will notify as soon as we can by email. </p> ';
     const warning = part1 + part2;

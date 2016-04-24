@@ -5,7 +5,7 @@ BackStore.LoadUserSettings((response) => {
     config = response.config;
 });
 
-document.querySelector('.btn-done').addEventListener('click', event => submitTrackings());
+document.getElementById('btn-done').addEventListener('click', event => submitTrackings());
 
 document.getElementById('btn-options')
     .addEventListener('click', () => {
@@ -27,7 +27,7 @@ const submitTrackings = () => {
                 });
             }
         } else {
-            document.querySelector('.btn-done').classList.add('btn-disabled');
+            document.getElementById('btn-done').classList.add('btn-disabled');
             document.getElementById('savingTrackingMessage').classList.remove('none');
             setTimeout(submitTrackings, 1000);
         }

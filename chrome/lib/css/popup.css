@@ -15,33 +15,6 @@ body {
   color: #777;
 }
 
-.btn-done {
-  background-color: #5cb85c;
-  color: white;
-  padding: 10px 15px;
-  border: 1px solid black;
-  border-radius: 5px;
-  font-size: 20px;
-  font-weight: bold;
-  box-shadow: 0 8px 9px -6px rgba(0, 0, 0, .3);
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.btn-done:hover {
-  background-color: #449d44;
-  cursor: pointer;
-  outline: 0px;
-}
-
-.btn-done:active {
-  background-color: #449d44;
-  border: 2px;
-  font-size: 25px;
-  cursor: pointer;
-  outline: 0px;
-}
-
 #btn-options {
   text-align: center
 }
@@ -63,14 +36,4 @@ body {
   font-weight: bold;
   width: 100%;
   margin-bottom: 20px;
-}
-
-.none {
-  display: none;
-}
-
-.btn-disabled {
-  cursor: default;
-  pointer-events: none;
-  opacity: 0.5;
 }
