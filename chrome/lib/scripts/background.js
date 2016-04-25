@@ -51,12 +51,6 @@ chrome.runtime.onMessage.addListener(
             sendResponse({
                 isTracking: tracker.isTracking()
             });
-        } else if (request.action === Actions.RELOAD) {
-            tracker.reload();
-            Store.SaveCurrentTracking(null);
-            chrome.tabs.getSelected(null, function(tab) {
-                chrome.tabs.reload(tab.id);
-            });
         } else {
             sendResponse('Error: Action not defined');
         }

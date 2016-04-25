@@ -12,12 +12,7 @@ BackStore.IsTracking((response) => {
     }
 });
 
-document.getElementById('btn-done').addEventListener('click', () => submitTrackings());
-
-document.getElementById('btn-cancel').addEventListener('click', () => {
-    BackStore.Reload();
-    window.close();
-});
+document.getElementById('btn-done').addEventListener('click', event => submitTrackings());
 
 document.getElementById('btn-options')
     .addEventListener('click', () => {

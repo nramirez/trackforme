@@ -51,12 +51,6 @@ const BackgroundStore = {
         chrome.runtime.sendMessage({
             action: Actions.ISTRACKING
         }, callback);
-    },
-
-    Reload() {
-        chrome.runtime.sendMessage({
-            action: Actions.RELOAD
-        });
     }
 };
 
