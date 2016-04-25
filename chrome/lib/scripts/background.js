@@ -6,6 +6,7 @@ import Actions from './core/actions';
 import Store from './core/store';
 import TrackingActivity from './core/TrackingActivity';
 
+let currentTabId;
 let tracker = new TrackForMe();
 
 chrome.runtime.onMessage.addListener(
@@ -20,9 +21,7 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.POSTTRACKINGS) {
             tracker.reload();
-            chrome.tabs.getSelected(null, function(tab) {
-                chrome.tabs.reload(tab.id);
-            });
+            chrome.tabs.reload(currentTabId);
             Store.PostTrackings(request.trackings, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             tracker.setBadge(Object.keys(request.currentTracking).length);
@@ -45,6 +44,9 @@ chrome.runtime.onMessage.addListener(
                 sendResponse(err);
             });
         } else if (request.action === Actions.STARTTRACKING) {
+            chrome.tabs.getSelected(null, function(tab) {
+                currentTabId = tab.id;
+            });
             tracker.startTracking();
             return false;
         } else if (request.action === Actions.ISTRACKING) {
@@ -54,15 +56,23 @@ chrome.runtime.onMessage.addListener(
         } else if (request.action === Actions.RELOAD) {
             tracker.reload();
             Store.SaveCurrentTracking(null);
-            chrome.tabs.getSelected(null, function(tab) {
-                chrome.tabs.reload(tab.id);
-            });
+            chrome.tabs.reload(currentTabId);
         } else {
             sendResponse('Error: Action not defined');
         }
         //http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
         return true;
     });
+
+chrome.tabs.onRemoved.addListener(tabId => ReloadWhenSameTabId(tabId));
+
+chrome.tabs.onUpdated.addListener(tabId => ReloadWhenSameTabId(tabId));
+
+chrome.windows.onRemoved.addListener(tracker.reload());
+
+const ReloadWhenSameTabId = tabId => {
+    if (tabId === currentTabId) tracker.reload();
+};
 
 const TrackingRunner = () => {
     return new Promise((resolve, reject) => {
