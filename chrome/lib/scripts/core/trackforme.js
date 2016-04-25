@@ -25,7 +25,7 @@ class TrackForMe {
     reload() {
         this.setIcon('default');
         this.setBadge();
-        this.isTracking = false;
+        this._isTracking = false;
     }
 
     setBadge(number) {
