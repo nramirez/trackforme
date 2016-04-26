@@ -20,8 +20,7 @@ chrome.runtime.onMessage.addListener(
                 });
             });
         } else if (request.action === Actions.POSTTRACKINGS) {
-            tracker.reload();
-            chrome.tabs.reload(currentTabId);
+            ReloadExtension(true);
             Store.PostTrackings(request.trackings, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
             tracker.setBadge(Object.keys(request.currentTracking).length);
@@ -54,9 +53,7 @@ chrome.runtime.onMessage.addListener(
                 isTracking: tracker.isTracking()
             });
         } else if (request.action === Actions.RELOAD) {
-            tracker.reload();
-            Store.SaveCurrentTracking(null);
-            chrome.tabs.reload(currentTabId);
+            ReloadExtension(true);
         } else {
             sendResponse('Error: Action not defined');
         }
@@ -64,14 +61,23 @@ chrome.runtime.onMessage.addListener(
         return true;
     });
 
-chrome.tabs.onRemoved.addListener(tabId => ReloadWhenSameTabId(tabId));
+chrome.tabs.onRemoved.addListener(tabId => {
+    if (tabId === currentTabId)
+        ReloadExtension();
+});
 
-chrome.tabs.onUpdated.addListener(tabId => ReloadWhenSameTabId(tabId));
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (tabId === currentTabId && changeInfo.status === 'loading')
+        ReloadExtension();
+});
 
-chrome.windows.onRemoved.addListener(tracker.reload());
+chrome.windows.onRemoved.addListener(ReloadExtension);
 
-const ReloadWhenSameTabId = tabId => {
-    if (tabId === currentTabId) tracker.reload();
+const ReloadExtension = (reloadCurrentTab = false) {
+    tracker.reload();
+    Store.SaveCurrentTracking(null);
+    if (reloadCurrentTab)
+        chrome.tabs.reload(currentTabId);
 };
 
 const TrackingRunner = () => {
