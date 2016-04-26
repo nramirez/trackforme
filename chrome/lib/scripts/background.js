@@ -73,7 +73,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 
 chrome.windows.onRemoved.addListener(ReloadExtension);
 
-const ReloadExtension = (reloadCurrentTab = false) {
+const ReloadExtension = (reloadCurrentTab = false) => {
     tracker.reload();
     Store.SaveCurrentTracking(null);
     if (reloadCurrentTab)
