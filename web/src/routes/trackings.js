@@ -22,11 +22,12 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     let trackingPayload = req.body.trackingPayload;
+    let trackings = trackingPayload.trackings;
     if (!trackingPayload) {
         res.status(500).send('trackingPayload is required');
     } else if (!trackingPayload.email) {
         res.status(500).send('trackingPayload.email is required');
-    } else if (!trackingPayload.trackings) {
+    } else if (!trackings || !Array.isArray(trackings) || !trackings.lengt) {
         res.status(500).send('trackingPayload.trackings is required');
     } else {
         //First get the user
@@ -36,14 +37,11 @@ router.post('/', (req, res) => {
             if (err || !user) {
                 res.status(500).send(`Error finding the user ${err}`);
             } else {
-                let trackings = trackingPayload.trackings;
-                let keys = Object.keys(trackings);
-                keys.forEach(k => {
-                    let tracking = trackings[k];
+                trackings.forEach(tracking =>{
                     tracking.user = user;
                     tracking.checkFrequency = user.trackingTime;
-                    tracking = new Tracking(tracking);
-                    tracking.save((trackingErr, saved) => {
+                    let trackingToSave = new Tracking(tracking);
+                    trackingToSave.save((trackingErr, saved) => {
                         if (trackingErr)
                             res.status(500).send(`Error saving the trackings: ${trackingErr}`);
                     });

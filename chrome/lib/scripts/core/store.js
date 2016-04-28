@@ -39,10 +39,18 @@ const Store = {
     PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG) || {};
         console.log(trackings);
+
+        // This will ensure that we always persist an array
+        trackings = this._trackingsToArray(trackings);
+
         //without email, save it locally in the USERCONFIG
-        if (!config.email || !trackings) {
-            if (trackings) {
-                config.trackings = trackings;
+        if (!config.email || !trackings || !trackings.length) {
+            if (trackings && trackings.length) {
+                if (config.trackings) {
+                    config.trackings.push(...trackings);
+                } else {
+                    config.trackings = trackings;
+                }
                 this._saveUserConfig(config);
             }
             callback(false);
@@ -54,12 +62,21 @@ const Store = {
             $.post(`${ServerBaseUrl}/trackings`, {
                 trackingPayload: trackingPayload
             }, (response) => {
-                console.log(response);
-                //clean the currentTrackings to avoid duplications
-                this.SaveCurrentTracking(null);
                 callback(true);
             });
         }
+    },
+
+    // Convert Trackings to Array
+    _trackingsToArray(trackings) {
+        if (!trackings)
+            return null;
+
+        if(Array.isArray(trackings))
+            return trackings;
+
+        let keys = Object.keys(trackings);
+        return keys.map(k => trackings[k]);
     },
 
     SaveImage(image, callback) {
