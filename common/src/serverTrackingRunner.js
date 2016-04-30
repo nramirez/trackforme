@@ -3,6 +3,9 @@
 import TrackingActivity from './trackingActivity';
 import ServerTracker from './serverTracker';
 
+const MINIMUNSPANTIME = 60;
+const AVOIDOVERLAPPINGSPANTIME = 15;
+
 class ServerTrackingRunner {
     constructor(store) {
         this.store = store;
@@ -30,8 +33,10 @@ class ServerTrackingRunner {
             this.store.Tracking.find({
                 $where: function() {
                     if (this.isDeleted || !this.isEnabled) return false;
+
                     var diff = ((new Date()).getTime() - this.lastScanDate.getTime()) / 60000; //difference in minutes
-                    return diff >= this.checkFrequency;
+
+                    return diff >= MINIMUNSPANTIME && diff >= (this.checkFrequency + AVOIDOVERLAPPINGSPANTIME);
                 }
             }, (err, trackings) => {
                 if (err) {
