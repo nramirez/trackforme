@@ -38,10 +38,6 @@ const Store = {
     //Persist trackings on the server
     PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG) || {};
-        console.log(trackings);
-
-        // This will ensure that we always persist an array
-        trackings = this._trackingsToArray(trackings);
 
         //without email, save it locally in the USERCONFIG
         if (!config.email || !trackings || !trackings.length) {
@@ -65,18 +61,6 @@ const Store = {
                 callback(true);
             });
         }
-    },
-
-    // Convert Trackings to Array
-    _trackingsToArray(trackings) {
-        if (!trackings)
-            return null;
-
-        if(Array.isArray(trackings))
-            return trackings;
-
-        let keys = Object.keys(trackings);
-        return keys.map(k => trackings[k]);
     },
 
     SaveImage(image, callback) {

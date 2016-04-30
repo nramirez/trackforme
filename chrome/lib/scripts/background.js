@@ -23,14 +23,14 @@ chrome.runtime.onMessage.addListener(
             ReloadExtension(true);
             Store.PostTrackings(request.trackings, sendResponse);
         } else if (request.action === Actions.SAVECURRENTTRACKING) {
-            tracker.setBadge(Object.keys(request.currentTracking).length);
+            tracker.setBadge(request.currentTrackings.length);
 
             sendResponse({
-                currentTracking: Store.SaveCurrentTracking(request.currentTracking)
+                currentTrackings: Store.SaveCurrentTracking(request.currentTrackings)
             });
         } else if (request.action === Actions.LOADCURRENTTRACKING) {
             sendResponse({
-                currentTracking: Store.LoadCurrentTracking()
+                currentTrackings: Store.LoadCurrentTracking()
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, sendResponse);

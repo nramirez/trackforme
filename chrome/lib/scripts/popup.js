@@ -32,17 +32,15 @@ document.getElementById('btn-start').addEventListener('click', () => {
 });
 
 const submitTrackings = () => {
-    BackStore.LoadCurrentTracking((response) => {
-        var areAllImagesLoaded = Object.keys(response.currentTracking).find(key => !response.currentTracking[key].img);
+    BackStore.LoadCurrentTracking(({currentTrackings}) => {
+        let waitingForImages = currentTrackings.find(t => !t.img);
 
-        if (!areAllImagesLoaded) {
-            if (response.currentTracking) {
-                BackStore.PostTrackings(response.currentTracking, () => {
-                    chrome.tabs.create({
-                        url: chrome.extension.getURL('/views/options.html')
-                    });
+        if (!waitingForImages) {
+            BackStore.PostTrackings(currentTrackings, () => {
+                chrome.tabs.create({
+                    url: chrome.extension.getURL('/views/options.html')
                 });
-            }
+            });
         } else {
             document.getElementById('btn-done').classList.add('btn-disabled');
             document.getElementById('savingTrackingMessage').classList.remove('none');
