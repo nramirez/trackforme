@@ -21,6 +21,7 @@ document.getElementById('btn-cancel').addEventListener('click', () => {
 
 document.getElementById('btn-options')
     .addEventListener('click', () => {
+        BackStore.Reload();
         chrome.tabs.create({
             url: chrome.extension.getURL('/views/options.html')
         });
