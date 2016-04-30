@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
         res.status(500).send('trackingPayload is required');
     } else if (!trackingPayload.email) {
         res.status(500).send('trackingPayload.email is required');
-    } else if (!trackings || !Array.isArray(trackings) || !trackings.lengt) {
+    } else if (!trackings || !Array.isArray(trackings) || !trackings.length) {
         res.status(500).send('trackingPayload.trackings is required');
     } else {
         //First get the user

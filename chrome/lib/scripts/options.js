@@ -20,7 +20,7 @@ document.getElementById('save-user-settings')
         };
         if (validEmail.test(email)) {
             displayTrackingTimeWarning(trackingTime);
-            BackStore.SaveUserSettings(userSettings, () => location.reload());
+            BackStore.SaveUserSettings(userSettings, initOptions);
         } else {
             document.getElementById('email-error').innerHTML = 'Invalid email';
         }
@@ -67,6 +67,10 @@ const displayTrackingTimeWarning = (trackingTime) => {
     document.getElementById('tracking-time-warning').innerHTML = warning;
 };
 
-BackStore.LoadUserSettings((response) => {
-    setupUserSettings(response.config);
-});
+const initOptions = () => {
+  BackStore.LoadUserSettings((response) => {
+      setupUserSettings(response.config);
+  });
+};
+
+initOptions();
