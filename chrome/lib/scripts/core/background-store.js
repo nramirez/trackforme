@@ -27,11 +27,11 @@ const BackgroundStore = {
         }, callback);
     },
 
-    SaveUserSettings(userSettings) {
+    SaveUserSettings(userSettings, callback) {
         chrome.runtime.sendMessage({
             action: Actions.SAVEUSERSETTINGS,
             userSettings: userSettings
-        });
+        }, callback);
     },
 
     RunTracking() {
