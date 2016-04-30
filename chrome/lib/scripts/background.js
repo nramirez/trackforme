@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener(
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, sendResponse);
         } else if (request.action === Actions.RUNTRACKING) {
-            TrackingRunner().then(response => {
+            TrackingRunner.run().then(response => {
                 console.log('tracking completed', response);
                 sendResponse(response);
             }).catch(err => {

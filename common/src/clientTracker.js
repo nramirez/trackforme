@@ -11,7 +11,10 @@ class ClientTracker extends BaseTracker {
         }).fail(reject)
     );
 
-    getElementByPath = path => this.document.find(path);
+    getElementByPath = path => {
+        let element = this.document.find(path);
+        return element ? element[0] : null;
+    };
 }
 
 export default ClientTracker;

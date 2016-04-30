@@ -51,7 +51,7 @@ gulp.task('watch', cb => {
     gulp.watch([
         `${paths.views}/**.handlebars`,
         `${paths.src}/**/**`,
-        `${paths.common}/src/**.js`
+        `${paths.common}/src/**/**`
     ], ['common', 'build']);
 });
 
