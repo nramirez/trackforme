@@ -14,9 +14,9 @@ const BackgroundStore = {
         }, callback);
     },
 
-    SaveCurrentTracking(currentTrackings) {
+    SaveCurrentTrackings(currentTrackings) {
         chrome.runtime.sendMessage({
-            action: Actions.SAVECURRENTTRACKING,
+            action: Actions.SAVECURRENTTRACKINGS,
             currentTrackings: currentTrackings,
         });
     },

@@ -25,7 +25,7 @@ const Store = {
     },
 
     //Save tracking in the local storage
-    SaveCurrentTracking(trackingElements) {
+    SaveCurrentTrackings(trackingElements) {
         console.log('saving tracking in progress', trackingElements);
         return amplify(CURRENTRACKING, trackingElements);
     },

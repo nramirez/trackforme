@@ -24,11 +24,11 @@ chrome.runtime.onMessage.addListener(
                 ReloadExtension(true);
                 sendResponse();
             });
-        } else if (request.action === Actions.SAVECURRENTTRACKING) {
+        } else if (request.action === Actions.SAVECURRENTTRACKINGS) {
             tracker.setBadge(request.currentTrackings.length);
 
             sendResponse({
-                currentTrackings: Store.SaveCurrentTracking(request.currentTrackings)
+                currentTrackings: Store.SaveCurrentTrackings(request.currentTrackings)
             });
         } else if (request.action === Actions.LOADCURRENTTRACKING) {
             sendResponse({
@@ -76,6 +76,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 chrome.windows.onRemoved.addListener(ReloadExtension);
 
 const ReloadExtension = (reloadCurrentTab = false) => {
+    Store.SaveCurrentTrackings(null);
     tracker.reload();
     if (reloadCurrentTab)
         chrome.tabs.reload(currentTabId);
