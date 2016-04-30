@@ -20,7 +20,7 @@ document.getElementById('save-user-settings')
         };
         if (validEmail.test(email)) {
             displayTrackingTimeWarning(trackingTime);
-            BackStore.SaveUserSettings(userSettings);
+            BackStore.SaveUserSettings(userSettings, initOptions);
         } else {
             document.getElementById('email-error').innerHTML = 'Invalid email';
         }
@@ -38,13 +38,10 @@ document.getElementById('tracking-tigger')
 
 function displayTrackings(trackings) {
     let innerTable = '';
-    if (!trackings || Object.keys(trackings).length == 0) {
+    if (!trackings || !trackings.length) {
         innerTable = '<tr><td colspan="2">Please add what you need to track. Watch how to do it in this video.</td></tr>';
     } else {
-        for (let k in trackings) {
-            let tracking = trackings[k];
-            innerTable += trackingRow(tracking.img, tracking.url);
-        }
+      innerTable = trackings.map(t => trackingRow(t.img, t.url)).join('');
     }
     document.getElementById('trackings-tbody').innerHTML = innerTable;
 }
@@ -70,6 +67,10 @@ const displayTrackingTimeWarning = (trackingTime) => {
     document.getElementById('tracking-time-warning').innerHTML = warning;
 };
 
-BackStore.LoadUserSettings((response) => {
-    setupUserSettings(response.config);
-});
+const initOptions = () => {
+  BackStore.LoadUserSettings((response) => {
+      setupUserSettings(response.config);
+  });
+};
+
+initOptions();

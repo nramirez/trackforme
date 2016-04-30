@@ -1,7 +1,7 @@
 import BackStore from './core/background-store';
 import Actions from './core/actions';
 
-let currentTrackings = {};
+let currentTrackings = [];
 let prevElement = null;
 const highlightClass = 'trackforme-highlight';
 const clickHandlerTimeout = 500;
@@ -34,22 +34,31 @@ const handleClick = (element) => {
     //Avoid this method to be called multiple times
     setTimeout(() => clickEventInProgress = false, clickHandlerTimeout);
 
-    let tracking = {
-        elementPath: fullPath(element),
+    let elementPath = fullPath(element);
+
+    //Exists
+    let tracking = currentTrackings.find(c => c.elementPath === elementPath);
+
+    if (tracking)
+        return;
+
+    tracking = {
+        elementPath: elementPath,
         url: window.location.href,
         elementContent: element.innerHTML
     };
 
-    currentTrackings[tracking.elementPath] = tracking;
+    currentTrackings.push(tracking);
+
     //This will save the tracking inmediately in the localstorage
-    BackStore.SaveCurrentTracking(currentTrackings);
+    BackStore.SaveCurrentTrackings(currentTrackings);
 
     chrome.runtime.sendMessage({
         action: Actions.SNAPSHOT
     }, (response) => {
-        currentTrackings[tracking.elementPath].img = response.imgSrc;
+        tracking.img = response.imgSrc;
         //This will update the saved tracking with the image url
-        BackStore.SaveCurrentTracking(currentTrackings);
+        BackStore.SaveCurrentTrackings(currentTrackings);
     });
 }
 

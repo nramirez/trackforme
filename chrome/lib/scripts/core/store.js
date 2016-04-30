@@ -25,7 +25,7 @@ const Store = {
     },
 
     //Save tracking in the local storage
-    SaveCurrentTracking(trackingElements) {
+    SaveCurrentTrackings(trackingElements) {
         console.log('saving tracking in progress', trackingElements);
         return amplify(CURRENTRACKING, trackingElements);
     },
@@ -38,11 +38,15 @@ const Store = {
     //Persist trackings on the server
     PostTrackings(trackings, callback) {
         let config = amplify(USERCONFIG) || {};
-        console.log(trackings);
+
         //without email, save it locally in the USERCONFIG
-        if (!config.email || !trackings) {
-            if (trackings) {
-                config.trackings = trackings;
+        if (!config.email || !trackings || !trackings.length) {
+            if (trackings && trackings.length) {
+                if (config.trackings) {
+                    config.trackings.push(...trackings);
+                } else {
+                    config.trackings = trackings;
+                }
                 this._saveUserConfig(config);
             }
             callback(false);
@@ -54,9 +58,6 @@ const Store = {
             $.post(`${ServerBaseUrl}/trackings`, {
                 trackingPayload: trackingPayload
             }, (response) => {
-                console.log(response);
-                //clean the currentTrackings to avoid duplications
-                this.SaveCurrentTracking(null);
                 callback(true);
             });
         }

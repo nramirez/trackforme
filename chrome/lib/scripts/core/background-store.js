@@ -14,11 +14,10 @@ const BackgroundStore = {
         }, callback);
     },
 
-    SaveCurrentTracking(currentTracking) {
-        console.log('saving current tracking', currentTracking);
+    SaveCurrentTrackings(currentTrackings) {
         chrome.runtime.sendMessage({
-            action: Actions.SAVECURRENTTRACKING,
-            currentTracking: currentTracking,
+            action: Actions.SAVECURRENTTRACKINGS,
+            currentTrackings: currentTrackings,
         });
     },
 
@@ -28,11 +27,11 @@ const BackgroundStore = {
         }, callback);
     },
 
-    SaveUserSettings(userSettings) {
+    SaveUserSettings(userSettings, callback) {
         chrome.runtime.sendMessage({
             action: Actions.SAVEUSERSETTINGS,
             userSettings: userSettings
-        });
+        }, callback);
     },
 
     RunTracking() {
