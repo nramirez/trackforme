@@ -11,47 +11,49 @@ let trackingTimeout;
 let tracker = new TrackForMe();
 
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function(request, sender, callback) {
         if (request.action === Actions.SNAPSHOT) {
-            TakeSnapshot(sendResponse);
+            TakeSnapshot(callback);
         } else if (request.action === Actions.LOADUSERSETTINGS) {
             Store.LoadUserSettings(response => {
-                sendResponse({
+                callback({
                     config: response
                 });
             });
         } else if (request.action === Actions.POSTTRACKINGS) {
-            Store.PostTrackings(request.trackings, () => {
+            Store.PostTrackings(request.trackings, config => {
                 ReloadExtension(true);
                 Store.LoadUserSettings(config => {
                     initTrackingRunner(config);
-                    sendResponse(config);
+                    callback(config);
                 });
             });
         } else if (request.action === Actions.SAVECURRENTTRACKINGS) {
             tracker.setBadge(request.currentTrackings.length);
 
-            sendResponse({
+            callback({
                 currentTrackings: Store.SaveCurrentTrackings(request.currentTrackings)
             });
+        } else if (request.action === Actions.DELETETRACKING) {
+            Store.DeleteTracking(request.img, callback);
         } else if (request.action === Actions.LOADCURRENTTRACKING) {
-            sendResponse({
+            callback({
                 currentTrackings: Store.LoadCurrentTracking()
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, () => {
                 Store.LoadUserSettings(config => {
                     initTrackingRunner(config);
-                    sendResponse(config);
+                    callback(config);
                 });
             });
         } else if (request.action === Actions.RUNTRACKING) {
             TrackingRunner.run().then(response => {
                 console.log('tracking completed', response);
-                sendResponse(response);
+                callback(response);
             }).catch(err => {
                 console.log('Error running tracking', err);
-                sendResponse(err);
+                callback(err);
             });
         } else if (request.action === Actions.STARTTRACKING) {
             chrome.tabs.getSelected(null, function(tab) {
@@ -60,13 +62,13 @@ chrome.runtime.onMessage.addListener(
             tracker.startTracking();
             return false;
         } else if (request.action === Actions.ISTRACKING) {
-            sendResponse({
+            callback({
                 isTracking: tracker.isTracking()
             });
         } else if (request.action === Actions.RELOAD) {
             ReloadExtension(true);
         } else {
-            sendResponse('Error: Action not defined');
+            callback('Error: Action not defined');
         }
         //http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
         return true;
@@ -92,8 +94,8 @@ const ReloadExtension = (reloadCurrentTab = false) => {
 };
 
 //Capture Handler
-const TakeSnapshot = (sendResponse) => chrome.tabs.captureVisibleTab(null, {},
-    (image) => Store.SaveImage(image, (err, imageUrl) => sendResponse({
+const TakeSnapshot = (callback) => chrome.tabs.captureVisibleTab(null, {},
+    (image) => Store.SaveImage(image, (err, imageUrl) => callback({
         err: err,
         imgSrc: imageUrl
     })));

@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
                         if (userToFind.trackingTime !== parseInt(req.body.trackingTime)) {
                             Tracking.update({
                                 user: userToFind._id,
-                                isDeleted : false
+                                isDeleted: false
                             }, {
                                 checkFrequency: user.trackingTime
                             }, {
@@ -82,7 +82,8 @@ router.get('/:email', (req, res) => {
             if (err || !user) res.status(500).send('Error finding the user: ' + err);
             else {
                 Tracking.find({
-                    user: user._id
+                    user: user._id,
+                    isDeleted: false
                 }, (err, trackings) => {
                     if (err) res.status(500).send('Error finding the trackings: ' + err);
                     res.send({

@@ -14,7 +14,7 @@ const User = userModel(mongoose);
 const Tracking = trackingModel(mongoose);
 
 router.get('/', (req, res) => {
-    Tracking.find({}, (err, trackings) => {
+    Tracking.find({isDeleted: false}, (err, trackings) => {
         if (err) res.status(500).send('Error finding trackings: ' + err);
         res.send(trackings);
     });
@@ -50,6 +50,30 @@ router.post('/', (req, res) => {
         });
         //TODO: Possible bug: I don't think this is happening after saving all trackings on line 44.
         res.send(`Trackings saved`);
+    }
+});
+
+router.delete('/', (req, res) => {
+    let userEmail = req.body.email;
+    let tracking = req.body.tracking;
+    if (!userEmail) {
+        res.status(500).send('User Email Required');
+    } else if (!tracking) {
+        res.status(500).send('Tracking Required');
+    } else {
+        Tracking.findOne({'_id' : tracking._id}, (err, t) => {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                t.isDeleted = true;
+                t.save((trackingErr, deleted) => {
+                    if (trackingErr)
+                        res.status(500).send(`Error deleting the tracking: ${trackingErr}`);
+                    else
+                        res.status(200).send(deleted);
+                });
+            }
+        });
     }
 });
 

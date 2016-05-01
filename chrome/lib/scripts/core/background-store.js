@@ -21,6 +21,13 @@ const BackgroundStore = {
         });
     },
 
+    DeleteTracking(img, callback){
+        chrome.runtime.sendMessage({
+            action: Actions.DELETETRACKING,
+            img: img
+        }, callback);
+    },
+
     LoadCurrentTracking(callback) {
         chrome.runtime.sendMessage({
             action: Actions.LOADCURRENTTRACKING

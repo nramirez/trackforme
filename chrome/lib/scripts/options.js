@@ -1,33 +1,35 @@
 import BackStore from './core/background-store';
+import $ from 'jquery';
 
 const setupUserSettings = (userSettings) => {
-    document.getElementById('email-input').value = userSettings.email || '';
-    document.getElementById('time-input').value = userSettings.trackingTime;
+    if (userSettings.email) {
+        $('#email-input').val(userSettings.email);
+        $('#time-input').val(userSettings.trackingTime);
+    }
     displayTrackings(userSettings.trackings);
+    bindPageElements();
 };
 
 const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-document.getElementById('save-user-settings')
-    .addEventListener('click', (event) => {
-        let email = document.getElementById('email-input').value;
-        let trackingTime = document.getElementById('time-input').value;
+$('#save-user-settings').click((event) => {
+    let email = $('#email-input').val();
+    let trackingTime = $('#time-input').val();
+    if (validEmail.test(email)) {
         let userSettings = {
             email: email,
             trackingTime: trackingTime
         };
-        if (validEmail.test(email)) {
-            displayTrackingTimeWarning(trackingTime);
-            BackStore.SaveUserSettings(userSettings, initOptions);
-        } else {
-            document.getElementById('email-error').innerHTML = 'Invalid email';
-        }
-    });
+        displayTrackingTimeWarning(trackingTime);
+        BackStore.SaveUserSettings(userSettings, initOptions);
+    } else {
+        $('#email-error').html('Invalid email');
+    }
+});
 
-document.getElementById('email-input')
-    .addEventListener('focus', (event) => {
-        document.getElementById('email-error').innerHTML = '';
-    });
+$('#email-input').focus((event) => {
+    $('#email-error').html('');
+});
 
 const displayTrackings = (trackings) => {
     let innerTable = '';
@@ -37,36 +39,55 @@ const displayTrackings = (trackings) => {
     } else {
         innerTable = trackings.map(trackingRow).join('');
     }
-    document.getElementById('trackings-tbody').innerHTML = innerTable;
+    $('#trackings-tbody').html(innerTable);
 };
 
-const trackingRow = ({ img, url, lastScanStatus, isEnabled }) =>
-    `<tr>
-    <td>
-    <input title="Disable/Enable tracking" checked="${isEnabled}" type="checkbox">
-    </td>
-    <td class="text-center">
-     ${lastScanStatus}
-    </td>
-    <td>
-      <a href="${img}" target="_blank">
-      <img class="img-preview" src="${img}" />
-      </a>
-    </td>
-    <td>
-      <a href="${url}" target="_blank">${url}</a>
-    </td>
-    <td class="td-without-border">
-      <button class="btn btn-danger" type="button">X</button>
-    </td>
-  </tr>`;
+let bindPageElements = () => {
+    $('.btn-delete').click((event) => {
+        let row = $(event.target.closest('tr'));
+        let img = row.attr('data-img');
+        BackStore.DeleteTracking(img, (res) => {
+            if (res) {
+                row.remove();
+            } else {
+                console.log('Unable to delete the tracking, contact TFM team if problem persist.');
+            }
+        });
+    });
+};
+
+const trackingRow = ({
+        img,
+        url,
+        lastScanStatus,
+        isEnabled
+    }) =>
+    `<tr data-img="${img}">
+        <td>
+            <input title="Disable/Enable tracking" checked="${isEnabled}" type="checkbox">
+        </td>
+        <td class="text-center">
+            ${lastScanStatus}
+        </td>
+        <td>
+            <a href="${img}" target="_blank">
+                <img class="img-preview" src="${img}" />
+            </a>
+        </td>
+        <td>
+            <a href="${url}" target="_blank">${url}</a>
+        </td>
+        <td class="td-without-border">
+            <button class="btn btn-danger btn-delete" type="button">X</button>
+        </td>
+    </tr>`;
 
 const displayTrackingTimeWarning = (trackingTime) => {
-    document.getElementById('tracking-time-warning').classList.remove('none');
+    $('#tracking-time-warning').removeClass('none');
     const timeText = trackingTime === '1' ? 'minute' : `${trackingTime} minutes`;
     const warning = `<p>  We will track your sites every ${timeText} ` +
-      'if your browser is open. Otherwise, we will notify as soon as we notice a change by email. </p>';
-    document.getElementById('tracking-time-warning').innerHTML = warning;
+        'if your browser is open. Otherwise, we will notify as soon as we notice a change by email. </p>';
+    $('#tracking-time-warning').html(warning);
 };
 
 const initOptions = () => {
@@ -80,5 +101,5 @@ initOptions();
 //Temporal hack to call the runner
 // Call window.Run() from the console
 window.Run = () => {
-  BackStore.RunTracking();
+    BackStore.RunTracking();
 };

@@ -43,6 +43,39 @@ const Store = {
         return amplify(CURRENTRACKING, trackingElements);
     },
 
+    // img: Is a unique identifier that all the trackings must have, id is only  for trackings saved in the db.
+    DeleteTracking(img, callback) {
+        let config = amplify(USERCONFIG) || {};
+        let trackings = config.trackings;
+        let trackingToDelete = trackings.find((t) => {
+            return t.img === img;
+        });
+
+        if (trackingToDelete._id) {
+            $.ajax({
+                url: `${ServerBaseUrl}/trackings/`,
+                type: 'DELETE',
+                data: {
+                    email: config.email,
+                    tracking: trackingToDelete
+                }
+            }).fail(err => {
+                console.log('server fail to delete', err);
+                callback(false);
+            });
+        } else {
+            this._deleteLocalTracking(img);
+            callback(true);
+        }
+        callback(true);
+    },
+
+    _deleteLocalTracking(img) {
+        let config = this._getLocalConfig();
+        config.trackings = config.trackings.filter(t => t.img != img);
+        this._saveLocalConfig(config);
+    },
+
     //Load tracking in the local storage
     LoadCurrentTracking() {
         return amplify(CURRENTRACKING);
