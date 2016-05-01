@@ -27,7 +27,7 @@ $('#save-user-settings').click((event) => {
     }
 });
 
-$('#email-input').focus((event) => {
+$('#email-input').focus(event => {
     $('#email-error').html('');
 });
 
