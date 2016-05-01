@@ -48,6 +48,7 @@ router.post('/', (req, res) => {
                 });
             }
         });
+        //TODO: Possible bug: I don't think this is happening after saving all trackings on line 44.
         res.send(`Trackings saved`);
     }
 });
@@ -63,6 +64,32 @@ router.post('/image', (req, res) => {
             .catch(err => res.status(500).send('Internal error: ' + err.stack));
     }
 });
+
+router.put('/statusupdate', (req, res) => {
+    var userEmail = req.body.email;
+    var tracking = req.body.tracking;
+    if (!userEmail) {
+        res.status(500).send('User Email Required');
+    } else if (!tracking) {
+        res.status(500).send('Tracking Required');
+    } else {
+        Tracking.findOne({'_id' : tracking._id}, (err, t) => {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                t.lastScanStatus = tracking.lastScanStatus;
+                t.lastScanDate = tracking.lastScanDate;
+                t.save((trackingErr, saved) => {
+                    if (trackingErr)
+                        res.status(500).send(`Error saving the tracking: ${trackingErr}`);
+                    else
+                        res.status(200).send(saved);
+                });
+            }
+        });
+    }
+});
+
 
 router.get('/run', (req, res) => {
     new ServerTrackingRunner(ServerStore(Tracking))

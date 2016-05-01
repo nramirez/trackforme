@@ -23,24 +23,13 @@ class BaseTracker {
 
         const currentElement = this.getElementByPath(path);
 
-        if (!currentElement) {
-            return {
-                changed: true,
-                reason: status.UNEXISTING
-            };
-        }
+        if (!currentElement)
+            return status.UNEXISTING;
 
-        if (lastContent !== currentElement.innerHTML) {
-            return {
-                changed: true,
-                reason: status.CHANGED
-            };
-        }
+        if (lastContent !== currentElement.innerHTML)
+            return status.CHANGED;
 
-        return {
-            changed: false,
-            reason: status.NOCHANGED
-        };
+        return status.NOCHANGES;
     }
 }
 

@@ -35,9 +35,9 @@
         "gulp-babel": "^6.1.2",
         "gulp-bower": "0.0.13",
         "gulp-shell": "^0.5.2",
-        "rimraf": "^2.5.2",
         "run-sequence": "^1.1.5",
-        "vinyl-source-stream": "^1.1.0"
+        "vinyl-source-stream": "^1.1.0",
+        "del": "^2.2.0"
     },
     "dependencies": {
         "amplify-store": "0.0.5",

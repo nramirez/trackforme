@@ -14,15 +14,15 @@
             <span id="title">TrackForMe</span>
         </div>
         <div class="panel-body">
-            <div class="input-div">
-                <div id="email">
-                    <p>Email: </p>
-                    <input type="email" name="email" id="email-input" placeholder="Add Your Email" required><span id="email-error"></span>
-                    <br>
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="email-input">Email:</label>
+                    <input type="email" class="form-control" name="email" id="email-input" placeholder="Add Your Email" required>
+                    <span id="email-error" class="form-control-error"></span>
                 </div>
-                <div id="time">
-                    <p>Tracking Time:</p>
-                    <select name="time" id="time-input">
+                <div class="form-group">
+                    <label for="time-input">Tracking Time:</label>
+                    <select name="time" id="time-input" class="form-control">
                         <option value="1">1 min</option>
                         <option value="5">5 min</option>
                         <option value="15" selected="selected">15 min</option>
@@ -33,21 +33,25 @@
                         <option value="1440">1 day</option>
                     </select>
                 </div>
-                <button class="btn btn-success btn-save" id="save-user-settings">Save Changes</button> <span id="saved-message"> </span>
+                <button class="btn btn-success" id="save-user-settings">Save Changes</button> <span id="saved-message"> </span>
                 <div id="tracking-time-warning" class="none"></div>
             </div>
             <hr>
-            <button id="tracking-tigger"> Track'em all, Now! </button>
-            <table id="trackings-table">
-                <thead>
-                    <tr>
-                        <th>Preview</th>
-                        <th>Website</th>
-                    </tr>
-                </thead>
-                <tbody id="trackings-tbody">
-                </tbody>
-            </table>
+            <section>
+                <table id="trackings-table" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Status</th>
+                            <th>Preview</th>
+                            <th>Website</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackings-tbody">
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
     <script src="../scripts/options.js"></script>

@@ -55,7 +55,7 @@ class TrackingActivity {
                     let trackings = this.getTrackingsNotEvaluated(tracking.url);
 
                     trackings.forEach(t => {
-                        t.status = tracker.checkElementStatus(t.elementContent, t.elementPath);
+                        t.lastScanStatus = tracker.checkElementStatus(t.elementContent, t.elementPath);
                         t.evaluated = true;
                         t.lastScanDate = new Date();
                     });

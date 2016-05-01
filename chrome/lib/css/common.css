@@ -109,3 +109,7 @@
   pointer-events: none;
   opacity: 0.5;
 }
+
+.text-center {
+  text-align: center;
+}

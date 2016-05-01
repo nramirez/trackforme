@@ -104,15 +104,25 @@ const Store = {
         trackings.forEach(tracking => {
             let configTracking = config.trackings.find(t => t.elementPath === tracking.elementPath);
             if (configTracking) {
-                configTracking.status = tracking.status;
+                configTracking.lastScanStatus = tracking.lastScanStatus;
                 configTracking.lastScanDate = tracking.lastScanDate;
+                // For now I will always notify the server but #91 will add some control about when to update it
+                this.putTrackingStatus(config.email, tracking);
             }
         });
 
-        console.log('trackings updated', trackings);
-
         this._saveUserConfig(config);
-        //TODO: Should we post the updates to the server?
+    },
+
+    putTrackingStatus(userEmail, tracking) {
+        $.ajax({
+            url: `${ServerBaseUrl}/trackings/statusupdate`,
+            type: 'PUT',
+            data: {
+                email: userEmail,
+                tracking: tracking
+            }
+        });
     }
 };
 

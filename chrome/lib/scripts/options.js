@@ -31,28 +31,32 @@ document.getElementById('email-input')
         document.getElementById('email-error').innerHTML = '';
     });
 
-document.getElementById('tracking-tigger')
-    .addEventListener('click', (e) => {
-        BackStore.RunTracking();
-    });
-
-function displayTrackings(trackings) {
+const displayTrackings = (trackings) => {
     let innerTable = '';
     if (!trackings || !trackings.length) {
-        innerTable = '<tr><td colspan="2">Please add what you need to track. Watch how to do it in this video.</td></tr>';
+        innerTable = '<tr><td colspan="5" class="text-center">' +
+            'Please add what you need to track. Watch how to do it in this video.</td></tr>';
     } else {
-      innerTable = trackings.map(t => trackingRow(t.img, t.url)).join('');
+        innerTable = trackings.map(trackingRow).join('');
     }
     document.getElementById('trackings-tbody').innerHTML = innerTable;
-}
+};
 
-const trackingRow = (imgUrl, url) =>
+const trackingRow = ({ img, url, lastScanStatus, isEnabled }) =>
     `<tr>
     <td>
-      <img class="img-preview" src="${imgUrl}" />
+    <input title="Disable/Enable tracking" checked="${isEnabled}" type="checkbox">
+    </td>
+    <td class="text-center">
+     ${lastScanStatus}
     </td>
     <td>
-      ${url}
+      <a href="${img}" target="_blank">
+      <img class="img-preview" src="${img}" />
+      </a>
+    </td>
+    <td>
+      <a href="${url}" target="_blank">${url}</a>
     </td>
     <td class="td-without-border">
       <button class="btn btn-danger" type="button">X</button>
@@ -68,9 +72,15 @@ const displayTrackingTimeWarning = (trackingTime) => {
 };
 
 const initOptions = () => {
-  BackStore.LoadUserSettings((response) => {
-      setupUserSettings(response.config);
-  });
+    BackStore.LoadUserSettings((response) => {
+        setupUserSettings(response.config);
+    });
 };
 
 initOptions();
+
+//Temporal hack to call the runner
+// Call window.Run() from the console
+window.Run = () => {
+  BackStore.RunTracking();
+};

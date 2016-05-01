@@ -1,4 +1,6 @@
 'use strict';
+
+import status from '../trackingStatus';
 const COLLECTION = 'Trackings';
 
 export default (mongoose) => {
@@ -21,6 +23,10 @@ export default (mongoose) => {
                 lastScanDate: {
                     type: Date,
                     default: Date.now
+                },
+                lastScanStatus: {
+                    type: String,
+                    default: status.UNTRACKED
                 },
                 checkFrequency: {
                     type: Number,

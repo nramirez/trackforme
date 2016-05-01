@@ -8,93 +8,182 @@ p {
   margin: 2px;
 }
 
+table {
+  background-color: transparent;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
 .panel {
-  width: 45%;
-  height: 700px;
+  width: 90%;
+  min-width: 630px;
+  max-width: 715px;
+  height: auto;
   background-color: white;
   border-radius: 25px;
-  margin: 30px auto;
-  overflow-y: auto;
-  overflow-x: hidden;
+  margin: 25px auto;
 }
 
 .panel-heading {
-  max-width: 100%;
-  height: 60px;
   background-color: #5cb85c;
   border-radius: 25px 25px 0px 0px;
   color: white;
-  padding: 10px 0px 5px 15px;
+  padding: 10px;
 }
 
 .panel-body {
-  max-width: 100%;
+  width: auto;
+  height: auto;
+  padding: 10px;
 }
 
-.input-div {
-  margin: 20px 0px 0px 20%;
+.form-inline {
+  margin: auto 25%;
 }
 
-#time {
-  margin-top: 16px
+.form-group {
+  margin-bottom: 15px;
 }
 
-#time-input, #email-input {
-  height: 30px;
-  border-radius: 8px;
-  padding: 2px;
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-#email-input {
-  width: 68%;
+.form-control:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
-#time-input {
-  width: 70%;
+.form-control::-moz-placeholder {
+  color: #999;
+  opacity: 1;
 }
 
-#email-error {
+.form-control:-ms-input-placeholder {
+  color: #999;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #999;
+}
+
+.form-control::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+
+.form-control[type="email"] {
+  width: 93%;
+  height: 25px;
+}
+
+.form-control-error {
   color: red;
 }
 
-.btn-save {
-  width: 70%;
-  margin: 20px 0px 20px 0px;
-}
-
-#tracking-time-warning {
-  background-color: #f2f2f2;
-  font-size: 15px;
-  width: 68%;
-  text-align: justify;
-  padding: 5px;
-  font-weight: normal;
-}
-
-#trackings-table {
-  margin: 5% 15%;
+table {
+  border-spacing: 0;
   border-collapse: collapse;
 }
 
-#trackings-table th, #trackings-table td {
-  border: 1px solid #e0e0e0;
-  border-collapse: collapse;
-  text-align: left;
-  padding: 15px;
-}
-
+td,
 th {
-  font-size: 20px;
-  background-color: #e7e7e7;
+  padding: 0;
 }
 
-#trackings-table .td-without-border {
-  border: 0px;
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
 }
 
-#trackings-table .td-delete-all {
-  border: 0px;
-  text-align: center;
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+
+.table > caption + thead > tr:first-child > th,
+.table > colgroup + thead > tr:first-child > th,
+.table > thead:first-child > tr:first-child > th,
+.table > caption + thead > tr:first-child > td,
+.table > colgroup + thead > tr:first-child > td,
+.table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+
+.table > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+
+.table .table {
+  background-color: #fff;
+}
+
+.table-bordered {
+  border: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 25%;
+  line-height: normal;
+}
+
+input[type="checkbox"]:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
 }
 
 .img-preview {

@@ -27,7 +27,6 @@
     "gulp-copy": "0.0.2",
     "gulp-live-server": "0.0.29",
     "gulp-shell": "^0.5.2",
-    "rimraf": "^2.5.2",
     "run-sequence": "^1.1.5",
     "vinyl-source-stream": "^1.1.0"
   },

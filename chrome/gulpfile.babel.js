@@ -3,7 +3,7 @@
 import source from 'vinyl-source-stream';
 import gulp from 'gulp';
 import run from 'run-sequence';
-import rimraf from 'rimraf';
+import del from 'del';
 import babelify from 'babelify';
 import browserify from 'browserify';
 
@@ -43,13 +43,13 @@ const jsBrowserifyer = (fileName) => {
 //build when a file has changed
 gulp.task('watch', cb => {
   gulp.watch([
-    `${paths.src}/**`
+    `${paths.src}/lib/**/**`
   ], ['build']);
 });
 
 //Clean the app destination, to prepare for new files
-gulp.task('clean', cb => {
-  rimraf(paths.dest, cb);
+gulp.task('clean', () => {
+  return del(paths.dest);
 });
 
 gulp.task('img', () => {

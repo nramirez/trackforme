@@ -1,9 +1,10 @@
 'use strict';
 
 const TrackingStatus = {
-  UNEXISTING: `The element doesn't exist`,
-  CHANGED: 'Element content has changed',
-  NOCHANGED: `Element didn't change`
+  UNEXISTING: 'Unexisting',
+  CHANGED: 'Changed',
+  NOCHANGES: 'No Changes',
+  UNTRACKED: 'Untracked'
 };
 
 export default TrackingStatus;
