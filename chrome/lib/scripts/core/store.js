@@ -8,7 +8,10 @@ const CURRENTRACKING = 'CURRENTRACKING';
 const Store = {
     LoadUserSettings(callback) {
         //By default try to local storage, in case the ajax request fails
-        let config = amplify(USERCONFIG) || {};
+        //Set trackingTime to 15 minutes by default
+        let config = amplify(USERCONFIG) || {
+            trackingTime: '15'
+        };
         if (config.email) {
             //Try to load the user info from the server
             $.get(`${ServerBaseUrl}/users/${config.email}`, (response) => {
