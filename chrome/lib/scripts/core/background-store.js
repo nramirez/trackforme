@@ -30,8 +30,7 @@ const BackgroundStore = {
 
     LoadCurrentTracking(callback) {
         chrome.runtime.sendMessage({
-            action: Actions.LOADCURRENTTRACKING,
-            imgUrl: imgUrl
+            action: Actions.LOADCURRENTTRACKING
         }, callback);
     },
 
