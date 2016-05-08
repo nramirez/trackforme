@@ -43,7 +43,7 @@ const jsBrowserifyer = (fileName) => {
 //build when a file has changed
 gulp.task('watch', cb => {
   gulp.watch([
-    `${paths.src}/lib/**/**`
+    `${paths.src}/**/**`
   ], ['build']);
 });
 

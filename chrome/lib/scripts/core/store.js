@@ -6,18 +6,28 @@ const USERCONFIG = 'USERCONFIG';
 const CURRENTRACKING = 'CURRENTRACKING';
 
 const Store = {
-    LoadUserSettings(callback) {
+    // Load user config from the local storage
+    _getLocalConfig() {
         //By default try to local storage, in case the ajax request fails
         //Set trackingTime to 15 minutes by default
-        let config = amplify(USERCONFIG) || {
+        return amplify(USERCONFIG) || {
             trackingTime: '15'
         };
+    },
+
+    // Save User config in the local storage
+    _saveLocalConfig(config) {
+        return amplify(USERCONFIG, config);
+    },
+
+    LoadUserSettings(callback) {
+        let config = this._getLocalConfig();
         if (config.email) {
             //Try to load the user info from the server
             $.get(`${ServerBaseUrl}/users/${config.email}`, (response) => {
                 config = response;
                 //Update localstorage
-                amplify(USERCONFIG, config);
+                this._saveLocalConfig(config);
             }).always(function() {
                 //Return config, either was loaded from the server or the local storage
                 callback(config);
@@ -40,7 +50,7 @@ const Store = {
 
     //Persist trackings on the server
     PostTrackings(trackings, callback) {
-        let config = amplify(USERCONFIG) || {};
+        let config = this._getLocalConfig();
 
         //without email, save it locally in the USERCONFIG
         if (!config.email || !trackings || !trackings.length) {
@@ -50,7 +60,7 @@ const Store = {
                 } else {
                     config.trackings = trackings;
                 }
-                this._saveUserConfig(config);
+                this._saveLocalConfig(config);
             }
             callback(false);
         } else {
@@ -72,11 +82,6 @@ const Store = {
         }, (url) => {
             callback(null, url);
         });
-
-    },
-
-    _saveUserConfig(config) {
-        return amplify(USERCONFIG, config);
     },
 
     SaveUserSettings(userSettings, callback) {
@@ -87,19 +92,29 @@ const Store = {
                 email: userSettings.email,
                 trackingTime: userSettings.trackingTime
             }).always(() => {
-                this._saveUserConfig({
-                    email: userSettings.email,
-                    trackingTime: userSettings.trackingTime
-                });
-                //save the currentTrackings in the server
-                this.PostTrackings(this.LoadCurrentTracking(), callback);
+                let config = this._getLocalConfig();
+                // This happens when it's the very first time that the user is setting the email
+                const needsToPostLocalTrackings = !config.email;
+
+                // Update config settings
+                config.email = userSettings.email;
+                config.trackingTime = userSettings.trackingTime;
+                // Persist this settings locally
+                this._saveLocalConfig(config);
+
+                if (needsToPostLocalTrackings) {
+                    //send trackings saved until now to the server
+                    this.PostTrackings(config.trackings, callback);
+                } else {
+                    callback(true);
+                }
             });
         }
     },
 
     // Use for the tracking activity to update the lastScanDate and the Status
     updateTrackingsStatus(trackings) {
-        let config = amplify(USERCONFIG);
+        let config = this._getLocalConfig();
 
         if (!config.trackings || config.trackings.length === 0)
             return;
@@ -114,7 +129,7 @@ const Store = {
             }
         });
 
-        this._saveUserConfig(config);
+        this._saveLocalConfig(config);
     },
 
     putTrackingStatus(userEmail, tracking) {
