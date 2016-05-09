@@ -36,6 +36,8 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.DELETETRACKING) {
             Store.DeleteTracking(request.img, callback);
+        } else if (request.action === Actions.ENABLEDISABLETRACKING) {
+            Store.EnableDisableTracking(request.img,request.isEnabled, callback);
         } else if (request.action === Actions.LOADCURRENTTRACKING) {
             callback({
                 currentTrackings: Store.LoadCurrentTracking()

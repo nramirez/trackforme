@@ -47,7 +47,8 @@ const handleClick = (element) => {
         elementPath: elementPath,
         url: window.location.href,
         elementContent: element.innerHTML,
-        lastScanStatus: TrackingStatus.UNTRACKED
+        lastScanStatus: TrackingStatus.UNTRACKED,
+        isEnabled: true
     };
 
     currentTrackings.push(tracking);

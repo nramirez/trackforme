@@ -78,6 +78,26 @@ router.delete('/', (req, res) => {
     }
 });
 
+router.put('/enableDisable', (req, res) => {
+    var id = req.body.id;
+    var isEnabled = req.body.isEnabled;
+    if (!id) {
+        res.status(500).send('TrackingID Required');
+    } else {
+        Tracking.findByIdAndUpdate(id, {
+            $set: {
+                isEnabled: isEnabled
+            }
+        }, function(err, tracking) {
+            if (err){
+              res.status(500).send(`Error saving the tracking: ${err}`);
+            }else{
+              res.send(tracking);
+            }
+        });
+    }
+});
+
 router.post('/image', (req, res) => {
     let image = req.body && req.body.image;
 
@@ -116,7 +136,6 @@ router.put('/statusupdate', (req, res) => {
         });
     }
 });
-
 
 router.get('/run', (req, res) => {
     new ServerTrackingRunner(ServerStore(Tracking))

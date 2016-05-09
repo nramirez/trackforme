@@ -45,12 +45,7 @@ const Store = {
 
     // img: Is a unique identifier that all the trackings must have, id is only  for trackings saved in the db.
     DeleteTracking(img, callback) {
-        let config = amplify(USERCONFIG) || {};
-        let trackings = config.trackings;
-        let trackingToDelete = trackings.find((t) => {
-            return t.img === img;
-        });
-
+        let trackingToDelete = this._getTrackingByImage(img);
         if (trackingToDelete._id) {
             $.ajax({
                 url: `${ServerBaseUrl}/trackings/`,
@@ -73,6 +68,29 @@ const Store = {
         let config = this._getLocalConfig();
         config.trackings = config.trackings.filter(t => t.img != img);
         this._saveLocalConfig(config);
+    },
+
+    EnableDisableTracking(img, isEnabled, callback) {
+        let trackingToEnableDisable = this._getTrackingByImage(img);
+        trackingToEnableDisable.isEnabled = isEnabled;
+        if (trackingToEnableDisable._id) {
+            $.ajax({
+                url: `${ServerBaseUrl}/trackings/enableDisable`,
+                type: 'PUT',
+                data: {
+                    id: trackingToEnableDisable._id,
+                    isEnabled: trackingToEnableDisable.isEnabled
+                }
+            });
+        } else {
+            this._saveLocalConfig(config)
+        }
+        callback(true);
+    },
+
+    _getTrackingByImage(img) {
+        let config = this._getLocalConfig();
+        return config.trackings ? config.trackings.find(t => t.img === img) : null;
     },
 
     //Load tracking in the local storage

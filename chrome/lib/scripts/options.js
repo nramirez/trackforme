@@ -43,28 +43,49 @@ const displayTrackings = (trackings) => {
 };
 
 let bindPageElements = () => {
-    $('.btn-delete').click((event) => {
-        let row = $(event.target.closest('tr'));
-        let img = row.attr('data-img');
+    $('.btn-delete').click(event => {
+        let img = getTrackingImg(event);
         BackStore.DeleteTracking(img, (res) => {
             if (res) {
+                let row = $(event.target.closest('tr'));
                 row.remove();
             } else {
                 console.log('Unable to delete the tracking, contact TFM team if problem persist.');
             }
         });
     });
+
+    $('.btn-enable-disable').click(event => {
+        let img = getTrackingImg(event);
+        let isEnabled;
+        if ($(event.target).prop('checked')) isEnabled = true;
+        else isEnabled = false;
+
+        BackStore.EnableDisableTracking(img, isEnabled, (res) => {
+            if (res) {
+                console.log("is Enabled? " + isEnabled)
+            } else {
+                console.log('Unable to Enabled/Disabled tracking');
+            }
+        });
+    });
+
+    const getTrackingImg = event => {
+        return $(event.target.closest('tr')).attr('data-img');
+    }
+
 };
 
 const trackingRow = ({
         img,
         url,
         lastScanStatus,
-        isEnabled
+        isEnabled,
+        checked = isEnabled ? 'checked' : '' //for add/remove the check in the checkbox
     }) =>
     `<tr data-img="${img}">
         <td>
-            <input title="Disable/Enable tracking" checked="${isEnabled}" type="checkbox">
+            <input class="btn-enable-disable" title="Disable/Enable tracking" ${checked} type="checkbox">
         </td>
         <td class="text-center">
             ${lastScanStatus}

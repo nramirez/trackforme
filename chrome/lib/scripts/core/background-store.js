@@ -21,10 +21,18 @@ const BackgroundStore = {
         });
     },
 
-    DeleteTracking(img, callback){
+    DeleteTracking(img, callback) {
         chrome.runtime.sendMessage({
             action: Actions.DELETETRACKING,
             img: img
+        }, callback);
+    },
+
+    EnableDisableTracking(img, isEnabled, callback) {
+        chrome.runtime.sendMessage({
+            action: Actions.ENABLEDISABLETRACKING,
+            img: img,
+            isEnabled: isEnabled,
         }, callback);
     },
 
