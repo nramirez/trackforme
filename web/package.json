@@ -38,6 +38,8 @@
     "hat": "0.0.3",
     "mongoose": "^4.4.12",
     "morgan": "^1.6.1",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "winston": "2.2.0",
+    "winston-papertrail": "1.0.2"
   }
 }

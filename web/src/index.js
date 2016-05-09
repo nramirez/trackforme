@@ -1,11 +1,13 @@
 'use strict';
 
+import config from '../config';
+process.env.NODE_ENV = config.NODE_ENV;
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import exphbs from 'express-handlebars';
 import mongoose from 'mongoose';
-import config from '../config';
 
 //Routes
 import usersRoutes from './routes/users';
@@ -88,5 +90,5 @@ app.use((err, req, res, next) => {
 app.use('/errors', errorRoutes);
 
 app.listen(PORT, () => {
-  console.log('Server is listening on port: ', PORT);
+  console.log(`Server is listening on port ${PORT} and the env is: ${process.env.NODE_ENV}`);
 });
