@@ -10,8 +10,8 @@ const TrackingRunner = {
             Store.LoadUserSettings(config =>
                 new TrackingActivity(config.trackings, Store, ClientTracker)
                 .run()
-                .then(() => console.log('Tracked everything'))
-                .catch(console.log)
+                .then(resolve)
+                .catch(reject)
             ));
     }
 };

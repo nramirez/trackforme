@@ -1,5 +1,6 @@
 import BackStore from './core/background-store';
 import Actions from './core/actions';
+import TrackingStatus from '../../../common/build/trackingStatus';
 
 let currentTrackings = [];
 let prevElement = null;
@@ -45,7 +46,8 @@ const handleClick = (element) => {
     tracking = {
         elementPath: elementPath,
         url: window.location.href,
-        elementContent: element.innerHTML
+        elementContent: element.innerHTML,
+        lastScanStatus: TrackingStatus.UNTRACKED
     };
 
     currentTrackings.push(tracking);

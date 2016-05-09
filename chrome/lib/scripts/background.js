@@ -7,6 +7,7 @@ import Store from './core/store';
 import TrackingRunner from './core/trackingRunner';
 
 let currentTabId;
+let trackingTimeout;
 let tracker = new TrackForMe();
 
 chrome.runtime.onMessage.addListener(
@@ -35,7 +36,12 @@ chrome.runtime.onMessage.addListener(
                 currentTrackings: Store.LoadCurrentTracking()
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
-            Store.SaveUserSettings(request.userSettings, sendResponse);
+            Store.SaveUserSettings(request.userSettings, () => {
+                Store.LoadUserSettings((config) => {
+                    initTrackingRunner(config);
+                    sendResponse(config);
+                });
+            });
         } else if (request.action === Actions.RUNTRACKING) {
             TrackingRunner.run().then(response => {
                 console.log('tracking completed', response);
@@ -88,3 +94,34 @@ const TakeSnapshot = (sendResponse) => chrome.tabs.captureVisibleTab(null, {},
         err: err,
         imgSrc: imageUrl
     })));
+
+const triggerRunner = (timeInMinutes) => {
+    console.log(`triggering the runner at ${new Date()} with a timeout of ${timeInMinutes}`)
+    let timeInMilliSeconds = timeInMinutes * 60 * 1000;
+    TrackingRunner.run()
+        .then(response => {
+            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
+                //TODO: maybe this is the moment to notify the user
+        })
+        .catch(err => {
+            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
+                //TODO: Notify the server about the error, so we can track it down
+        });
+};
+
+const initTrackingRunner = (config) => {
+    if (trackingTimeout) {
+        // Just in case there's another timeout instantiated
+        clearTimeout(trackingTimeout);
+    }
+    // Init the runner only if the user has a trackingTime set
+    if (config && config.trackingTime &&
+        Number(config.trackingTime) > 0 &&
+        config.trackings &&
+        config.trackings.length) {
+        triggerRunner(Number(config.trackingTime));
+    }
+}
+
+// Initialize the runner when the chrome starts
+Store.LoadUserSettings(initTrackingRunner);

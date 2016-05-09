@@ -1,10 +1,8 @@
 import BackStore from './core/background-store';
 
 const setupUserSettings = (userSettings) => {
-    if (userSettings.email) {
-        document.getElementById('email-input').value = userSettings.email;
-        document.getElementById('time-input').value = userSettings.trackingTime;
-    }
+    document.getElementById('email-input').value = userSettings.email || '';
+    document.getElementById('time-input').value = userSettings.trackingTime;
     displayTrackings(userSettings.trackings);
 };
 
@@ -65,9 +63,9 @@ const trackingRow = ({ img, url, lastScanStatus, isEnabled }) =>
 
 const displayTrackingTimeWarning = (trackingTime) => {
     document.getElementById('tracking-time-warning').classList.remove('none');
-    const part1 = '<p>  We will track your sites every <b> ' + trackingTime;
-    const part2 = ' </b> minutes if your browser is open. Otherwise, we will notify as soon as we can by email. </p> ';
-    const warning = part1 + part2;
+    const timeText = trackingTime === '1' ? 'minute' : `${trackingTime} minutes`;
+    const warning = `<p>  We will track your sites every ${timeText} ` +
+      'if your browser is open. Otherwise, we will notify as soon as we notice a change by email. </p>';
     document.getElementById('tracking-time-warning').innerHTML = warning;
 };
 
