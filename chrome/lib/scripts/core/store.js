@@ -11,7 +11,7 @@ const Store = {
         //By default try to local storage, in case the ajax request fails
         //Set trackingTime to 15 minutes by default
         return amplify(USERCONFIG) || {
-            trackingTime: '15'
+            trackingTime: '1'
         };
     },
 
@@ -133,6 +133,10 @@ const Store = {
     },
 
     putTrackingStatus(userEmail, tracking) {
+        // For local tracking we don't have to notify the server
+        if (!userEmail)
+            return;
+
         $.ajax({
             url: `${ServerBaseUrl}/trackings/statusupdate`,
             type: 'PUT',

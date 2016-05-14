@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(
         if (request.action === Actions.SNAPSHOT) {
             TakeSnapshot(sendResponse);
         } else if (request.action === Actions.LOADUSERSETTINGS) {
-            Store.LoadUserSettings((response) => {
+            Store.LoadUserSettings(response => {
                 sendResponse({
                     config: response
                 });
@@ -23,7 +23,10 @@ chrome.runtime.onMessage.addListener(
         } else if (request.action === Actions.POSTTRACKINGS) {
             Store.PostTrackings(request.trackings, () => {
                 ReloadExtension(true);
-                sendResponse();
+                Store.LoadUserSettings(config => {
+                    initTrackingRunner(config);
+                    sendResponse(config);
+                });
             });
         } else if (request.action === Actions.SAVECURRENTTRACKINGS) {
             tracker.setBadge(request.currentTrackings.length);
@@ -37,7 +40,7 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, () => {
-                Store.LoadUserSettings((config) => {
+                Store.LoadUserSettings(config => {
                     initTrackingRunner(config);
                     sendResponse(config);
                 });
