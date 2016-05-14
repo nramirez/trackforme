@@ -95,18 +95,40 @@ const TakeSnapshot = (sendResponse) => chrome.tabs.captureVisibleTab(null, {},
         imgSrc: imageUrl
     })));
 
+/**
+ * Instantiate the TrackingRunner and recursevily call itself every {timeInMinutes}
+ *
+ * @param int timeInMinutes : How frequent the tracker has to run.
+ */
 const triggerRunner = (timeInMinutes) => {
     console.log(`triggering the runner at ${new Date()} with a timeout of ${timeInMinutes}`)
     let timeInMilliSeconds = timeInMinutes * 60 * 1000;
     TrackingRunner.run()
-        .then(response => {
-            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
-                //TODO: maybe this is the moment to notify the user
+        .then(changedTrackings => {
+            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds);
+            if (changedTrackings && changedTrackings.length > 0)
+                DisplayNotification('You have new tracking updates!');
         })
         .catch(err => {
             trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
                 //TODO: Notify the server about the error, so we can track it down
         });
+};
+
+/**
+ * Push chrome notifications to the user
+ *
+ * @param string message : Body message of the notification
+ * @param string title (optional) : Title message of the notification, 'TrackForMe - Updates' if not present.
+ */
+const DisplayNotification = (message, title) => {
+    title = title || 'TrackForMe - Updates';
+    chrome.notifications.create(null, {
+        type: 'basic',
+        iconUrl: 'img/default-icon.png',
+        title: 'TrackForMe - Updates',
+        message: message
+    });
 };
 
 const initTrackingRunner = (config) => {
@@ -121,7 +143,7 @@ const initTrackingRunner = (config) => {
         config.trackings.length) {
         triggerRunner(Number(config.trackingTime));
     }
-}
+};
 
 // Initialize the runner when the chrome starts
 Store.LoadUserSettings(initTrackingRunner);
