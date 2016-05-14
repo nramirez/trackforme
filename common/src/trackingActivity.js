@@ -1,6 +1,7 @@
 'use strict';
 
 import 'babel-polyfill';
+import TrackingStatus from './trackingStatus';
 
 class TrackingActivity {
     constructor(trackings, store, tracker) {
@@ -39,7 +40,8 @@ class TrackingActivity {
                 this.trackingIterator(resolve, reject);
             }
         } else {
-            resolve();
+            var trackingThatChanged = this.getChangedTrackings();
+            resolve(trackingThatChanged);
         }
     }
 
@@ -73,12 +75,19 @@ class TrackingActivity {
         this.Store.updateTrackingsStatus(trackings);
     }
 
-    //Get tracking for an specific url, that haven't been evaluated yet
+    // Retrieves tracking for an specific url, that haven't been evaluated yet
     getTrackingsNotEvaluated(url) {
         return this.trackings.filter(t => !t.evaluated && t.url === url);
     }
 
-    //Returns the currentTracking being evaluated and jump to the next one
+    // Retrievs trackings which status has changed
+    getChangedTrackings() {
+        return this.trackings
+            .filter(t => t.lastScanStatus === TrackingStatus.CHANGED ||
+                t.lastScanStatus === TrackingStatus.CHANGED);
+    }
+
+    // Retrieves the currentTracking being evaluated and jump to the next one
     * trackingsGenerator() {
         while (this.trackingIndex < this.trackings.length) {
             yield this.trackings[this.trackingIndex];

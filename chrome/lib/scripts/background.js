@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(
         if (request.action === Actions.SNAPSHOT) {
             TakeSnapshot(sendResponse);
         } else if (request.action === Actions.LOADUSERSETTINGS) {
-            Store.LoadUserSettings((response) => {
+            Store.LoadUserSettings(response => {
                 sendResponse({
                     config: response
                 });
@@ -23,7 +23,10 @@ chrome.runtime.onMessage.addListener(
         } else if (request.action === Actions.POSTTRACKINGS) {
             Store.PostTrackings(request.trackings, () => {
                 ReloadExtension(true);
-                sendResponse();
+                Store.LoadUserSettings(config => {
+                    initTrackingRunner(config);
+                    sendResponse(config);
+                });
             });
         } else if (request.action === Actions.SAVECURRENTTRACKINGS) {
             tracker.setBadge(request.currentTrackings.length);
@@ -37,7 +40,7 @@ chrome.runtime.onMessage.addListener(
             });
         } else if (request.action === Actions.SAVEUSERSETTINGS) {
             Store.SaveUserSettings(request.userSettings, () => {
-                Store.LoadUserSettings((config) => {
+                Store.LoadUserSettings(config => {
                     initTrackingRunner(config);
                     sendResponse(config);
                 });
@@ -95,13 +98,19 @@ const TakeSnapshot = (sendResponse) => chrome.tabs.captureVisibleTab(null, {},
         imgSrc: imageUrl
     })));
 
+/**
+ * Instantiate the TrackingRunner and recursevily call itself every {timeInMinutes}
+ *
+ * @param int timeInMinutes : How frequent the tracker has to run.
+ */
 const triggerRunner = (timeInMinutes) => {
     console.log(`triggering the runner at ${new Date()} with a timeout of ${timeInMinutes}`)
     let timeInMilliSeconds = timeInMinutes * 60 * 1000;
     TrackingRunner.run()
-        .then(response => {
-            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
-                //TODO: maybe this is the moment to notify the user
+        .then(changedTrackings => {
+            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds);
+            if (changedTrackings && changedTrackings.length > 0)
+                DisplayNotification('You have new tracking updates!');
         })
         .catch(err => {
             trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
@@ -109,6 +118,36 @@ const triggerRunner = (timeInMinutes) => {
         });
 };
 
+/**
+ * Push chrome notifications to the user
+ *
+ * @param string message : Body message of the notification
+ * @param string title (optional) : Title message of the notification, 'TrackForMe - Updates' if not present.
+ */
+const DisplayNotification = (message, title) => {
+    title = title || 'TrackForMe - Updates';
+    chrome.notifications.create(null, {
+        type: 'basic',
+        iconUrl: 'img/default-icon.png',
+        title: 'TrackForMe - Updates',
+        message: message
+    });
+};
+
+// If the user clicks on the notification
+// This sends them to the app options
+chrome.notifications.onClicked.addListener(notificationId => {
+    chrome.tabs.create({
+        url: chrome.extension.getURL('/views/options.html')
+    });
+    chrome.notifications.clear(notificationId);
+});
+
+/**
+ * Initializes the TrackingRunner trigger
+ *
+ * @param object config : current configuration
+ */
 const initTrackingRunner = (config) => {
     if (trackingTimeout) {
         // Just in case there's another timeout instantiated
@@ -121,7 +160,7 @@ const initTrackingRunner = (config) => {
         config.trackings.length) {
         triggerRunner(Number(config.trackingTime));
     }
-}
+};
 
 // Initialize the runner when the chrome starts
 Store.LoadUserSettings(initTrackingRunner);

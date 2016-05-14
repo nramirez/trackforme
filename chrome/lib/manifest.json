@@ -8,7 +8,8 @@
     "webNavigation",
     "tabs",
     "*://*/",
-    "<all_urls>"
+    "<all_urls>",
+    "notifications"
   ],
   "icons": {
     "16": "/img/icon16.png",
