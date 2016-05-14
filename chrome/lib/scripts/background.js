@@ -134,6 +134,20 @@ const DisplayNotification = (message, title) => {
     });
 };
 
+// If the user clicks on the notification
+// This sends them to the app options
+chrome.notifications.onClicked.addListener(notificationId => {
+    chrome.tabs.create({
+        url: chrome.extension.getURL('/views/options.html')
+    });
+    chrome.notifications.clear(notificationId);
+});
+
+/**
+ * Initializes the TrackingRunner trigger
+ *
+ * @param object config : current configuration
+ */
 const initTrackingRunner = (config) => {
     if (trackingTimeout) {
         // Just in case there's another timeout instantiated
