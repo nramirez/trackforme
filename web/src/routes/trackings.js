@@ -14,7 +14,9 @@ const User = userModel(mongoose);
 const Tracking = trackingModel(mongoose);
 
 router.get('/', (req, res) => {
-    Tracking.find({isDeleted: false}, (err, trackings) => {
+    Tracking.find({
+        isDeleted: false
+    }, (err, trackings) => {
         if (err) res.status(500).send('Error finding trackings: ' + err);
         res.send(trackings);
     });
@@ -37,7 +39,7 @@ router.post('/', (req, res) => {
             if (err || !user) {
                 res.status(500).send(`Error finding the user ${err}`);
             } else {
-                trackings.forEach(tracking =>{
+                trackings.forEach(tracking => {
                     tracking.user = user;
                     tracking.checkFrequency = user.trackingTime;
                     let trackingToSave = new Tracking(tracking);
@@ -54,14 +56,13 @@ router.post('/', (req, res) => {
 });
 
 router.delete('/', (req, res) => {
-    let userEmail = req.body.email;
-    let tracking = req.body.tracking;
-    if (!userEmail) {
-        res.status(500).send('User Email Required');
-    } else if (!tracking) {
-        res.status(500).send('Tracking Required');
+    let id = req.body.id;
+    if (!id) {
+        res.status(500).send('TrackingID Required');
     } else {
-        Tracking.findOne({'_id' : tracking._id}, (err, t) => {
+        Tracking.findOne({
+            '_id': id
+        }, (err, t) => {
             if (err) {
                 res.status(500).send(err);
             } else {
@@ -97,7 +98,9 @@ router.put('/statusupdate', (req, res) => {
     } else if (!tracking) {
         res.status(500).send('Tracking Required');
     } else {
-        Tracking.findOne({'_id' : tracking._id}, (err, t) => {
+        Tracking.findOne({
+            '_id': tracking._id
+        }, (err, t) => {
             if (err) {
                 res.status(500).send(err);
             } else {
