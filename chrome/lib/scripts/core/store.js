@@ -56,8 +56,7 @@ const Store = {
                 url: `${ServerBaseUrl}/trackings/`,
                 type: 'DELETE',
                 data: {
-                    email: config.email,
-                    tracking: trackingToDelete
+                    id: trackingToDelete._id
                 }
             }).fail(err => {
                 console.log('server fail to delete', err);
