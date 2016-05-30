@@ -14,38 +14,31 @@ import usersRoutes from './routes/users';
 import trackingsRoutes from './routes/trackings';
 import errorRoutes from './routes/errors';
 
-const localdb = 'mongodb://localhost:27017/trackforme';
-const devdb = 'Please a backup db';
 let dbReconnectionRetryTime = 1000;
-let currentDb = localdb;
-
-mongoose.connect(currentDb);
-
+mongoose.connect(config.dbConnectionString);
 var db = mongoose.connection;
+
 db.on('error', (err) => {
   console.log(err);
   // hack the driver to allow re-opening after initial network error
   db.db.close();
 
   setTimeout(() => {
-    currentDb = currentDb === localdb ? devdb : localdb;
-    console.log('Retrying to reconnect to: ', currentDb);
-    mongoose.connect(currentDb);
-    //Increment the retry, so we give some time for the endpoint recuperation.
+    console.log('Retrying to connect.');
+    mongoose.connect(config.dbConnectionString);
     dbReconnectionRetryTime += dbReconnectionRetryTime;
-  }, dbReconnectionRetryTime);
-});
+  }, dbReconnectionRetryTime);});
 
 db.once('open', function() {
-  console.log('db is up and running on', currentDb);
+  console.log('db is up and running.');
 });
 
 const app = express();
-const PORT = 8000;
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
+
 app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/public'));
@@ -61,10 +54,7 @@ app.use(bodyParser.urlencoded({
   limit: config.maxScreenshotSize
 }));
 
-app.get('/', (req, res) => {
-  res.render('home');
-});
-
+app.get('/', (req, res) => res.render('home'));
 app.use('/users', usersRoutes);
 app.use('/trackings', trackingsRoutes);
 
@@ -89,6 +79,6 @@ app.use((err, req, res, next) => {
 
 app.use('/errors', errorRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT} and the env is: ${process.env.NODE_ENV}`);
+app.listen(config.PORT, () => {
+  console.log(`Server is listening on port ${config.PORT} and the env is: ${process.env.NODE_ENV}`);
 });

@@ -8,5 +8,7 @@
     }
   },
   "maxScreenshotSize" : "5mb",
-  "NODE_ENV" : "development"
+  "NODE_ENV" : "development",
+  "dbConnectionString" : "mongodb://localhost:27017/trackforme",
+  "PORT" : 8000
 }
