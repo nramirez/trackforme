@@ -29,7 +29,7 @@ const paths = {
 let express;
 
 gulp.task('default', cb => {
-    run('server', 'clean-common', 'common', 'build', 'watch', cb);
+    run('server', 'clean-common', 'build', 'watch', cb);
 });
 
 gulp.task('bower', cb => {
@@ -43,7 +43,7 @@ gulp.task('build', cb => {
 
 //This task is to publish to our site
 gulp.task('deploy-server', cb => {
-    run('clean', 'babel', 'bower', 'img', 'css', 'client', cb);
+    run('clean', 'clean-common', 'babel', 'bower', 'img', 'css', 'client', cb);
 });
 
 //build when a file has changed
@@ -80,12 +80,28 @@ gulp.task('clean-common', cb => {
 //Transform back-end ES6 to ES5
 //only transform features not supported by node v5
 gulp.task('babel', cb => {
+    run('common', 'web', cb);
+});
+
+gulp.task('web', cb => {
     return gulp.src(`${paths.src}/**/*.js`)
         .pipe(babel({
             presets: ['es2015-node5', 'stage-0']
         }))
         .pipe(gulp.dest(paths.dest));
 });
+
+/*
+  transpile common
+*/
+gulp.task('common', cb => {
+    return gulp.src(`${paths.common}/src/**/*.js`)
+        .pipe(babel({
+            presets: ['es2015', 'stage-0']
+        }))
+        .pipe(gulp.dest(`${paths.common}/build`));
+});
+
 
 /*
   Client
@@ -113,15 +129,4 @@ gulp.task('css', cb => {
 gulp.task('img', cb => {
     return gulp.src(`${paths.img}/**`)
         .pipe(copy(paths.dest));
-});
-
-/*
-  Common
-*/
-gulp.task('common', cb => {
-    return gulp.src(`${paths.common}/src/**/*.js`)
-        .pipe(babel({
-            presets: ['es2015', 'stage-0']
-        }))
-        .pipe(gulp.dest(`${paths.common}/build`));
 });
