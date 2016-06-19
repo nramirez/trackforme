@@ -3,7 +3,6 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import s3Handler from '../core/s3';
-import ServerTrackingRunner from '../../../common/build/serverTrackingRunner.js';
 import userModel from '../../../common/build/models/user.js';
 import trackingModel from '../../../common/build/models/tracking.js';
 import ServerStore from '../../../common/build/serverStore.js';
