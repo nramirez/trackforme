@@ -117,8 +117,8 @@ const triggerRunner = (timeInMinutes) => {
                 DisplayNotification('You have new tracking updates!');
         })
         .catch(err => {
-            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds)
-                //TODO: Notify the server about the error, so we can track it down
+            trackingTimeout = setTimeout(() => triggerRunner(timeInMinutes), timeInMilliSeconds);
+            console.error(err);
         });
 };
 

@@ -4,6 +4,7 @@ import $ from 'jquery';
 const ServerBaseUrl = 'http://localhost:8000';
 const USERCONFIG = 'USERCONFIG';
 const CURRENTRACKING = 'CURRENTRACKING';
+const MINIMUMSERVERTRACKINGTIME = 60;
 
 const Store = {
     // Load user config from the local storage
@@ -173,13 +174,19 @@ const Store = {
             let configTracking = config.trackings.find(t => t.elementPath === tracking.elementPath);
             if (configTracking) {
                 configTracking.lastScanStatus = tracking.lastScanStatus;
-                configTracking.lastScanDate = tracking.lastScanDate;
-                // For now I will always notify the server but #91 will add some control about when to update it
-                this.putTrackingStatus(config.email, tracking);
+                if (this._trackingNeedsToNotifyServer(config.trackingTime, configTracking)) {
+                    configTracking.lastScanDate = new Date();
+                    this.putTrackingStatus(config.email, tracking);
+                }
             }
         });
 
         this._saveLocalConfig(config);
+    },
+
+    _trackingNeedsToNotifyServer(trackingTime, tracking) {
+        var lastUpdatedDiff = ((new Date()).getTime() - new Date(tracking.lastScanDate).getTime()) / 60000;
+        return lastUpdatedDiff < MINIMUMSERVERTRACKINGTIME;
     },
 
     putTrackingStatus(userEmail, tracking) {
