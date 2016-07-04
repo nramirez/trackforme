@@ -39,6 +39,7 @@
     "mongoose": "^4.4.12",
     "morgan": "^1.6.1",
     "request": "^2.72.0",
+    "scribe-js": "^2.0.4",
     "winston": "2.2.0",
     "winston-papertrail": "1.0.2"
   }
