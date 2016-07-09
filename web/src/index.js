@@ -2,6 +2,7 @@
 
 import config from '../config';
 process.env.NODE_ENV = config.NODE_ENV;
+var scribe = require('scribe-js')();
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -57,6 +58,7 @@ app.use(bodyParser.urlencoded({
 app.get('/', (req, res) => res.render('home'));
 app.use('/users', usersRoutes);
 app.use('/trackings', trackingsRoutes);
+app.use('/logs', scribe.webPanel());
 
 //If we got here, we couldn't find the route
 app.use((req, res, next) => {
