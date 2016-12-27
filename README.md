@@ -4,10 +4,10 @@ You'll be able to track words, values, designs and more! Follow the simple steps
 
 ## Why TrackForMe?
 
-Have you ever waste time verifiying over and over again the same page waiting for a change? If your answer was yes, don't do that again! Our extension tracks this change for you!
+Have you ever waste time verifying over and over again the same page waiting for a change? If your answer was yes, don't do that again! Our extension tracks this change for you!
 
 ## Download the extension for...
-- Chrome: (TBA)
+- Chrome: (You can use the extension in dev mode on chrome)
 - Firefox: (TBA)
 - Safari: (TBA)
 
@@ -15,7 +15,7 @@ Have you ever waste time verifiying over and over again the same page waiting fo
 
 ### Developing
 
-Check the [wiki](https://github.com/nramirez/trackforme/wiki) to know more about the dev enviroment.
+Check the [wiki](https://github.com/nramirez/trackforme/wiki) to know more about the dev environment.
 
 #### All contributions should: 
 - Respect the community (nothing negative or trolling)
